@@ -1,0 +1,27 @@
+{% extends 'Kh/BaseBundle/Views/base.twig' %}
+
+{% if search %}
+	{% set title = 'Поиск по запросу «'~search~'»' %}
+{% else %}
+{% endif %}
+
+{% block title %}
+	{% if search %}
+		<h1 class="detailedTitle">
+			<div class="dtTitle">
+				Поиск по запросу «{{ search }}»
+			</div>
+			<div class="dtInfo">
+				Найдено заметок: {{ count }}
+			</div>
+		</h1>
+	{% else %}
+
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+	{% include 'Kh/ContentBundle/Views/posts.twig' %}
+
+{% endblock %}

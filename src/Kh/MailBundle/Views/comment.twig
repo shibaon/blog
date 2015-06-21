@@ -1,0 +1,24 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>{{ subject }}</title>
+</head>
+
+<body>
+	<p>Здравствуйте!</p>
+
+	<p>К заметке «{{ title }}» поступил новый комментарий от {{ author }}:</p>
+
+	<blockquote>{{ text }}</blockquote>
+
+	<p><a href="{{ commentUrl }}">Посмотреть комментарий</a>.</p>
+
+	<p>Если вы хотите отписаться от уведомлений о комментариях к этой заметке, перейдите по ссылке
+		<a href="{{ unsubscribeLink }}">{{ unsubscribeLink }}</a>
+	</p>
+
+	С уважением,
+	{{ blogAuthor }}
+</body>
+
+</html>

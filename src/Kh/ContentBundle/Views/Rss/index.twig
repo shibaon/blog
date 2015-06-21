@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+	<channel>
+		<title>{{ header.title }}</title>
+		<link>{{ app.request.getSchemeAndHttpHost() }}/</link>
+		<description>{{ header.motto }}</description>
+		<language>ru-ru</language>
+		<pubDate>{{ "now"|date("r") }}</pubDate>
+		<lastBuildDate>{{ "now"|date("r") }}</lastBuildDate>
+		<generator>Symfony 2.2</generator>
+		<webMaster>{{ webmaster }}</webMaster>
+		{% for p in posts %}
+			<item>
+				<title>{{ p.title }}</title>
+				<link>{{ url('_post', {id:p.id}) }}</link>
+				<description>{{ p.text }}</description>
+				<pubDate>{{ timestamp|date('r') }}</pubDate>
+				<guid>{{ url('_post', {id:p.id}) }}</guid>
+			</item>
+		{% endfor %}
+	</channel>
+</rss>

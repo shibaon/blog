@@ -1,0 +1,11 @@
+{% extends 'Kh/BaseBundle/Views/base.twig' %}
+
+{% set title = "Авторизация" %}
+
+{% block content %}
+
+	{{ form.render|raw }}
+
+	Вы так же можете <a href="{{ path('_register') }}">зарегистрироваться</a> или <a href="{{ path('_restore') }}">восстановить пароль</a>.
+
+{% endblock %}

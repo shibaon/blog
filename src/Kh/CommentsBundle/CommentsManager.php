@@ -1,0 +1,122 @@
+<?php
+
+namespace Kh\CommentsBundle;
+
+use Kh\BaseBundle\ContainerAware;
+use Kh\CommentsBundle\Entity\Comment;
+use Kh\ContentBundle\Entity\Post;
+use Sv\BaseBundle\Forms\Form;
+
+class CommentsManager extends ContainerAware
+{
+
+	public function processCommentForm(Form $form, Post $post)
+	{
+		$request = $this->getRequest();
+		if ($form->handleRequest($this->getRequest())->isValid()) {
+			$data = $form->getData();
+			if (!($user = $this->c->getUserManager()->getCurrentUser()) && (!isset($data['address1']) || !isset($data['address2']) || $data['address1'] != $data['address2'])) {
+				$this->c->getAlertsManager()->addAlert('error', 'Ошибка публикации комментария. Возможно, вы бот.');
+
+				return null;
+			}
+			$comment = new Comment();
+			$comment
+				->setUserId($user ? $user->getId() : null)
+				->setAuthor(@$data['author'])
+				->setEmail(strtolower(@$data['email']))
+				->setUrl(@$data['url'])
+				->setText($data['text'])
+				->setPostId($post->getId())
+				->resetTimestamp()
+				->setIp($request->getClientIp())
+				->save();
+			$this->updatePostCommentsCount($post);
+
+			if (@$data['author']) {
+				$this->c->getCookies()->set('c_author', $data['author']);
+			}
+			if (@$data['email']) {
+				$this->c->getCookies()->set('c_email', $data['email']);
+			}
+			if (@$data['url']) {
+				$this->c->getCookies()->set('c_url', $data['url']);
+			}
+
+			if (@$data['email'] && @$data['subscribe']) {
+				$this->c->getCommentsSubscriptionManager()->subscribe($post, $data['email']);
+			}
+
+			$this->c->getMailManager()->commentMail($comment);
+
+			return $comment;
+		}
+
+		return null;
+	}
+
+	public function getPostCommentsForTemplate(Post $post)
+	{
+		$result = array();
+		foreach (Comment::findBy(['postId' => $post->getId()], ['timestamp' => 'asc']) as $c) {
+			$result[] = $this->getCommentForTemplate($c);
+		}
+
+		return $result;
+	}
+
+	public function getCommentForTemplate(Comment $comment)
+	{
+		$user = $comment->getUser();
+
+		$author = $user ? $user->getName() : $comment->getAuthor();
+		$email = $user ? $user->getEmail() : $comment->getEmail();
+
+		$url = $comment->getUrl();
+		if ($url) {
+			if (strpos($url, 'http') === false) {
+				$url = 'http://' . $url;
+			}
+		}
+		$default = $this->getRequest()->getSchemeAndHttpHost() . '/bundles/khbase/img/default_avatar.png';
+		if ($email) {
+			$avatar = "http://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?d=" . urlencode($default) . "&s=" . 80;
+		} else {
+			$avatar = $default;
+		}
+
+		return [
+			'id' => $comment->getId(),
+			'author' => $author,
+			'url' => $url,
+			'email' => $email,
+			'date' => date('d.m.Y в H:i', $comment->getTimestamp()),
+			'text' => $comment->getText(),
+			'avatar' => $avatar,
+			'post' => array(
+				'title' => $comment->getPost()->getTitle(),
+				'href' => $this->c->getRouting()->getUrl('_post', ['id' => $comment->getPost()->getId()]),
+			),
+		];
+	}
+
+	/**
+	 * @param $id
+	 * @return Comment
+	 */
+	public function getComment($id)
+	{
+		return Comment::findOneById($id);
+	}
+
+	public function updatePostCommentsCount(Post $post)
+	{
+		$post->setCommentsCount($this->getCommentsCount($post))->save();
+	}
+
+	public function getCommentsCount(Post $post)
+	{
+		return Comment::$connection->executeQuery('SELECT COUNT(*) FROM comment WHERE post_id = :post', ['post' => $post->getId()])->fetchColumn(0);
+	}
+
+}

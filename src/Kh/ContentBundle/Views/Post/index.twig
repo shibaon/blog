@@ -1,0 +1,37 @@
+{% extends 'Kh/BaseBundle/Views/base.twig' %}
+
+{% set title = post.title %}
+
+{% block content %}
+
+	<div class="postPage">
+		<div class="pDate">{{ post.date }}
+			{% if currentAdmin %}<a href="{{ path('_admin_post_edit', {id:post.id}) }}?back={{ app.request.getRequestUri()|url_encode }}"><b class="icon-pencil icon-white"></b> Редактировать</a>{% endif %}
+		</div>
+		<div class="pContent">
+			{{ post.text|raw }}
+		</div>
+		<div class="socials">
+			<script type="text/javascript">(function() {
+					if (window.pluso)if (typeof window.pluso.start == "function") return;
+					if (window.ifpluso==undefined) { window.ifpluso = 1;
+						var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+						s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+						s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+						var h=d[g]('body')[0];
+						h.appendChild(s);
+					}})();</script>
+			<div class="pluso" data-background="transparent" data-options="small,round,line,horizontal,nocounter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter"></div>
+		</div>
+		{% if post.categories|length %}
+			<div class="pRubs">
+				Рубрики:
+				{% for c in post.categories %}
+					<a href="{{ path('_category', {id:c.id}) }}">{{ c.name }}</a>{% if not loop.last %}, {% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
+		{% include 'Kh/CommentsBundle/Views/comments.twig' with {comments:post.comments, count:post.commentsCount, plural:post.commentsPlural, form:form} %}
+	</div>
+
+{% endblock %}

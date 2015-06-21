@@ -1,0 +1,50 @@
+.sonata-bc textarea {
+	width:800px;
+}
+.sortable.RcPromoBundleEntityCert img {
+	margin-top:-2px;
+}
+textarea#teaser {
+	width:900px;
+	height:100px;
+}
+
+.tagsPopup {
+	background:#fff;
+	position:absolute;
+	z-index:1000;
+	padding:4px 0;
+	border:1px #999 solid;
+	border-radius:6px;
+	font-size:15px;
+	min-width:200px;
+	line-height:24px;
+}
+.tagsPopup div {
+	cursor:pointer;
+	padding:0 12px;
+	white-space:nowrap;
+}
+.tagsPopup div:hover {
+	background:#2989d8;
+	color:#fff;
+}
+
+.ui-datepicker {
+	font-size:12px !important;
+}
+
+
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }

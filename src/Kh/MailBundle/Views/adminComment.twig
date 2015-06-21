@@ -1,0 +1,9 @@
+{% extends 'Kh/MailBundle/Views/admin.twig' %}
+
+{% block content %}
+
+	<p>Поступил новый <a href="http://{{ siteurl }}{{ comment.getUrl() }}">комментарий</a>:</p>
+
+	<p style="font-style:italic;color:#666">{{ comment.getText()|nl2br }}</p>
+
+{% endblock %}

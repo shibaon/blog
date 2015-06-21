@@ -1,0 +1,22 @@
+<div id="comments" class="clearfix">
+	{% if count %}<h2>{{ count }} {{ count|plural('комментарий', 'комментария', 'комментариев') }}</h2>{% endif %}
+	{% for c in comments %}
+		<div class="comment clearfix">
+			<div class="cAuthor">
+				<img style="width:80px;height:80px" src="{{ c.avatar }}"/>
+				<span class="auth">{% if c.url %}<a rel="nofollow" target="_blank" href="{{ c.url }}">{% endif %}{{ c.author }}{% if c.url %}</a>{% endif %}</span>
+			</div>
+			<div class="cText">
+				<div class="cDate"><a id="comment-{{ c.id }}" href="{{ c.post.href }}#comment-{{ c.id }}">{{ c.date }}</a>
+					{% if withPosts %}к <a href="{{ c.post.href }}#comment-{{ c.id }}">{{ c.post.title }}</a>{% endif %}
+					{% if currentUser.isAdmin() %}<a data-cid="{{ c.id }}" class="commentRemove glyphicon glyphicon-remove"></a>{% endif %}
+				</div>
+				{{ c.text|nl2br }}
+			</div>
+		</div>
+	{% endfor %}
+	{% if form %}
+		<h2>Оставить комментарий</h2>
+		{{ form.render|raw }}
+	{% endif %}
+</div>

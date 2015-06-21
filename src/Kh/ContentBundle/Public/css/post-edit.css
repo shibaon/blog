@@ -1,0 +1,23 @@
+.postEdit {
+	float:left;
+	padding-right:200px;
+	margin-right:-200px;
+	width:100%;
+}
+.postCats {
+	float:right;
+	position:relative;
+	z-index:1;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	font-size:12px;
+}
+.postCats label {
+	display:block;
+	font-weight:normal;
+	margin-bottom:0;
+}
+.postCats label input {
+	position:relative;
+	top:3px;
+}

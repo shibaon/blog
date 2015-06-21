@@ -1,0 +1,10 @@
+{% extends 'Kh/BaseBundle/Views/base.twig' %}
+
+{% set title = 'Все комментарии' %}
+
+{% block content %}
+
+	{% include 'Kh/CommentsBundle/Views/comments.twig' with {withPosts: true} %}
+	{% include 'Kh/BaseBundle/Views/paginator.twig' %}
+
+{% endblock %}
