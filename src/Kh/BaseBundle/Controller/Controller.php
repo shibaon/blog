@@ -27,6 +27,11 @@ class Controller extends \Sv\BaseBundle\Controller\Controller
 			'currentAdmin' => $this->c->getUserManager()->getCurrentAdmin(),
 			'alerts' => $this->c->getAlertsManager()->getAlerts(),
 			'menu' => $this->c->getMenuManager()->getMenuTree(),
+			'soc' => [
+				'twitter' => $this->c->getSettingsManager()->get('soc.twitter'),
+				'vk' => $this->c->getSettingsManager()->get('soc.vk'),
+				'webmaster' => $this->c->getSettingsManager()->get('webmaster'),
+			],
 			'header' => array(
 				'title' => $this->c->getSettingsManager()->get('sitename'),
 				'motto' => $this->c->getSettingsManager()->get('motto'),
@@ -34,7 +39,7 @@ class Controller extends \Sv\BaseBundle\Controller\Controller
 			),
 			'footer' => [
 				'copyright' => $this->c->getSettingsManager()->get('copyright'),
-				'partners' => $this->c->getSettingsManager()->get('footerPartners'),
+				'counters' => $this->c->getSettingsManager()->get('counters'),
 			],
 			'counters' => $this->c->getSettingsManager()->get('counters'),
 		];
