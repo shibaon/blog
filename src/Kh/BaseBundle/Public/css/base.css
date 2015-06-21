@@ -65,19 +65,24 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 
 #wrapper {
-	width:850px;
+	max-width:850px;
+	min-width:370px;
 	margin:0 auto;
-	padding-top:41px;
+	padding-top:15px;
 }
 
 #header {
-	height:160px;
+	min-height:160px;
 	position:relative;
+	overflow:hidden;
 }
 #header .logo {
-	position:absolute;
-	left:19px;
-	top:64px;
+	float:left;
+	margin-left:19px;
+	margin-top:64px;
+	padding-right:20px;
+	line-height:50px;
+	padding-bottom:20px;
 }
 #header .logo .logoA {
 	font-size:48px;
@@ -88,14 +93,20 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 #header .logo .motto {
 	position:relative;
-	left:3px;
-	top:-10px;
+	left:8px;
+	top:-14px;
+}
+.width800 #header .logo .motto {
+	display:none;
 }
 
 #header .socIcons {
 	position:absolute;
 	right:10px;
 	bottom:20px;
+}
+.width750 #header .socIcons {
+	display:none;
 }
 #header .socIcons a {
 	width:32px;
@@ -210,23 +221,36 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .comment .cAuthor {
 	float:left;
+	color:#ddd;
+	position:relative;
+}
+.comment .cAuthor img {
 	width:80px;
 	height:80px;
-	position:relative;
-	color:#ddd;
+}
+.width500 .cAuthor img {
+	width:40px;
+	height:40px;
 }
 .comment .cAuthor .auth {
 	background:url(../img/middle_back.png) left top repeat;
 	font-size:11px;
-	width:80px;
+	width:100%;
 	position:absolute;
 	bottom:0;
 	left:0;
 	text-align:center;
 	line-height:18px;
 }
+.width500 .comment .cAuthor .auth {
+	font-size:10px;
+	line-height:12px;
+}
 .comment .cText {
-	margin-left:100px;
+	margin-left:95px;
+}
+.width500 .comment .cText {
+	margin-left:50px;
 }
 .comment .cDate {
 	font-size:10px;

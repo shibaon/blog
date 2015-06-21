@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>{% if title %}{{ title }} - {% endif %}{{ header.title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	{% block styles %}
 		<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&subset=latin,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'/>
 		<link rel="stylesheet" type="text/css" href="{{ asset('khbase/bootstrap/css/bootstrap.min.css') }}" />
@@ -13,12 +14,13 @@
 		<script type="text/javascript" src="{{ asset('khbase/bootstrap/js/bootstrap.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('khbase/fancybox/source/jquery.fancybox.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('khbase/js/base.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('khbase/js/adaptive.js') }}"></script>
 	{% endblock %}
 </head>
 
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container-fixed">
+	<div class="container-fixed adaptive-container">
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li><a href="#wrapper"><b class="glyphicon glyphicon-hand-up"></b>Наверх</a></li>
@@ -64,7 +66,7 @@
 	</div>
 </div>
 
-<div id="wrapper">
+<div id="wrapper" class="adaptive-container">
 	<div id="header">
 		<span class="logo"><a class="logoA" href="/">{{ header.title }}</a>{% if header.motto %} <span class="motto">{{ header.motto|raw }}</span>{% endif %}</span>
 		<div class="socIcons">

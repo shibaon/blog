@@ -3,7 +3,7 @@
 	{% for c in comments %}
 		<div class="comment clearfix">
 			<div class="cAuthor">
-				<img style="width:80px;height:80px" src="{{ c.avatar }}"/>
+				<img src="{{ c.avatar }}" class="commentImage" />
 				<span class="auth">{% if c.url %}<a rel="nofollow" target="_blank" href="{{ c.url }}">{% endif %}{{ c.author }}{% if c.url %}</a>{% endif %}</span>
 			</div>
 			<div class="cText">

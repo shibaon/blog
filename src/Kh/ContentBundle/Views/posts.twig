@@ -21,7 +21,9 @@
 			{% if not p.commentsCount %}
 				Комментариев пока нет, <a href="{{ path('_post', {id:p.id}) }}#postComment">оставьте первый комментарий</a>
 			{% else %}
-				У заметки <a href="{{ path('_post', {id:p.id}) }}#comments">{{ p.commentsCount }}</a> {{ p.commentsPlural }}. <a href="{{ path('_post', {id:p.id}) }}#postComment">Оставить комментарий</a>.
+				У заметки <a href="{{ path('_post', {id:p.id}) }}#comments">{{ p.commentsCount }}</a>
+				{{ p.commentsCount|plural('комментарий', 'комментария', 'комментариев') }}.
+				<a href="{{ path('_post', {id:p.id}) }}#postComment">Оставить комментарий</a>.
 			{% endif %}
 		</div>
 	</div>

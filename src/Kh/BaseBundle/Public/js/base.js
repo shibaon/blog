@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$('.comment .commentRemove').deleteComment();
 	$('.navbar-search').searchForm();
 	$('#comments form').commentForm();
-	$('#content img').contentImage();
+	$('#content img').not('.commentImage').contentImage();
 });
 
 $.fn.contentImage = function(){
