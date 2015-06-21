@@ -9,6 +9,20 @@ use Symfony\Component\HttpFoundation\Request;
 class Bundle extends \Svi\Bundle
 {
 
+	function __construct(Application $app)
+	{
+		parent::__construct($app);
+
+		$app->getSilex()->before(function(Request $request){
+			if (
+				preg_match('/^\\/admin.*/', $request->getRequestUri()) &&
+				!$this->getApp()->get('manager.user')->getCurrentAdmin()
+			) {
+				return $this->getApp()->getSilex()->redirect($this->getApp()->getRouting()->getUrl('_login'));
+			}
+		});
+	}
+
 	public function getRoutes()
 	{
 		return [
