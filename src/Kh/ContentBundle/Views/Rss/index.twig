@@ -14,7 +14,7 @@
 				<title>{{ p.title }}</title>
 				<link>{{ url('_post', {id:p.id}) }}</link>
 				<description>{{ p.text }}</description>
-				<pubDate>{{ timestamp|date('r') }}</pubDate>
+				<pubDate>{{ p.timestamp|date('r') }}</pubDate>
 				<guid>{{ url('_post', {id:p.id}) }}</guid>
 			</item>
 		{% endfor %}

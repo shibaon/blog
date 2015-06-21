@@ -10,10 +10,10 @@ class RssController extends Controller
 
 	public function indexAction()
 	{
-		return $this->getTemplateParameters(array(
+		return $this->render('index', $this->getTemplateParameters([
 			'webmaster' => $this->c->getSettingsManager()->get('webmaster'),
 			'posts' => $this->c->getPostManager()->getPosts(null, null, 0, 10),
-		));
+		]));
 	}
 
 	public function feedAction()
