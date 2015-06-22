@@ -19,54 +19,56 @@
 </head>
 
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container-fixed adaptive-container">
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li><a href="#wrapper"><b class="glyphicon glyphicon-hand-up"></b>Наверх</a></li>
 
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="glyphicon glyphicon-tags"></b>Рубрики <b class="caret"></b></a>
-					<ul class="dropdown-menu categoriesMenu">
-						{% for c in header.categories %}
-							<li><a href="{{ path('_category', {id:c.getId()}) }}">{{ c.getName() }}{% if c.postsCount %} ({{ c.postsCount }}){% endif %}</a></li>
-						{% endfor %}
-					</ul>
-				</li>
+<div id="menu">
+	<div class="mInner">
+		<ul>
+			<li><a href="#wrapper"><b class="glyphicon glyphicon-hand-up"></b> </a></li>
 
-				<li><a href="{{ path('_comments') }}"><b class="glyphicon glyphicon-comment"></b>Комментарии</a></li>
-
-				{% if menu %}
-					{% for route, item in menu %}
-						<li {% if item.noLink %}class="dropdown"{% endif %}><a {% if not item.noLink %}href="{{ path(route) }}"{% else %}href="#" class="dropdown-toggle" data-toggle="dropdown"{% endif %}>{{ item.title }}{% if item.noLink %} <b class="caret"></b>{% endif %}</a>
-							{% if item.items %}
-								<ul class="dropdown-menu">
-									{% for route, item in item.items %}
-										<li><a href="{% if not item.directLink %}{{ path(route) }}{% else %}{{ route }}{% endif %}">{{ item.title }}</a></li>
-									{% endfor %}
-								</ul>
-							{% endif %}
-						</li>
+			<li class="dropdown catsLi"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="glyphicon glyphicon-tags"></b>
+					<select>{% for c in header.categories %}<option value="{{ path('_category', {id:c.getId()}) }}">{{ c.getName() }}</option>{% endfor %}</select>
+					Рубрики <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu categoriesMenu">
+					{% for c in header.categories %}
+						<li><a href="{{ path('_category', {id:c.getId()}) }}">{{ c.getName() }}{% if c.postsCount %} ({{ c.postsCount }}){% endif %}</a></li>
 					{% endfor %}
-				{% endif %}
+				</ul>
+			</li>
 
-				<li>
-					<a href="http://dev.shibanov.com/" title="Мой сайт, посвящённый моей профессиональной деятельности в качестве веб-разработчика">
-						<b class="glyphicon glyphicon-briefcase"></b>Портфолио</a>
-				</li>
+			<li><a href="{{ path('_comments') }}"><b class="glyphicon glyphicon-comment"></b>Комменты</a></li>
 
-				{% if currentAdmin %}<li><a href="{{ path('_admin') }}">Админка</a></li>{% endif %}
-			</ul>
+			{% if menu %}
+				{% for route, item in menu %}
+					<li {% if item.noLink %}class="dropdown"{% endif %}><a {% if not item.noLink %}href="{{ path(route) }}"{% else %}href="#" class="dropdown-toggle" data-toggle="dropdown"{% endif %}>{{ item.title }}{% if item.noLink %} <b class="caret"></b>{% endif %}</a>
+						{% if item.items %}
+							<ul class="dropdown-menu">
+								{% for route, item in item.items %}
+									<li><a href="{% if not item.directLink %}{{ path(route) }}{% else %}{{ route }}{% endif %}">{{ item.title }}</a></li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</li>
+				{% endfor %}
+			{% endif %}
 
-			<form class="navbar-form navbar-right" role="search" action="/">
-				<div class="form-group">
-					<input type="text" class="form-control" name="search" required="1" placeholder="Поиск по блогу">
-				</div>
-			</form>
-		</div>
+			<li>
+				<a href="http://dev.shibanov.com/" title="Мой сайт, посвящённый моей профессиональной деятельности в качестве веб-разработчика">
+					<b class="glyphicon glyphicon-briefcase"></b>Фолио</a>
+			</li>
+
+			{% if currentAdmin %}<li><a href="{{ path('_admin') }}">Админка</a></li>{% endif %}
+		</ul>
+
+		<form class="navbar-form navbar-right" role="search" action="/">
+			<div class="form-group">
+				<input type="text" class="form-control input-sm" name="search" required="1" placeholder="Поиск по блогу">
+			</div>
+		</form>
 	</div>
 </div>
 
-<div id="wrapper" class="adaptive-container">
+<div id="wrapper">
 	<div id="header">
 		<span class="logo"><a class="logoA" href="/">{{ header.title }}</a>{% if header.motto %} <span class="motto">{{ header.motto|raw }}</span>{% endif %}</span>
 		<div class="socIcons">
