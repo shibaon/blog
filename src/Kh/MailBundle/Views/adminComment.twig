@@ -2,7 +2,7 @@
 
 {% block content %}
 
-	<p>Поступил новый <a href="http://{{ commentUrl }}">комментарий</a>:</p>
+	<p>Поступил новый <a href="{{ commentUrl }}">комментарий</a>:</p>
 
 	<p style="font-style:italic;color:#666">{{ comment.getText()|nl2br }}</p>
 
