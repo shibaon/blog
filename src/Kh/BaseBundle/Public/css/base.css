@@ -89,12 +89,18 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	top:0;
 	display:none;
 }
-.width650 #menu .catsLi select {
-	display:block;
-	opacity:0;
+@media (max-width:650px) {
+	#menu .catsLi select {
+		display:block;
+		opacity:0;
+	}
+	#menu .catsLi .dropdown-menu {
+		display:none;
+	}
 }
-.width650 #menu .catsLi .dropdown-menu {
-	display:none;
+#menu .navbar-form {
+	margin-left:10px;
+	margin-right:10px;
 }
 
 #menu li .categoriesMenu {
@@ -149,8 +155,10 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	left:8px;
 	top:-14px;
 }
-.width800 #header .logo .motto {
-	display:none;
+@media (max-width:800px) {
+	#header .logo .motto {
+		display:none;
+	}
 }
 
 #header .socIcons {
@@ -158,8 +166,10 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	right:10px;
 	bottom:20px;
 }
-.width750 #header .socIcons {
-	display:none;
+@media (max-width:750px) {
+	#header .socIcons {
+		display:none;
+	}
 }
 #header .socIcons a {
 	width:32px;
@@ -262,8 +272,14 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 #comments form h2 {
 	margin-left:180px;
 }
+@media (min-width:768px) {
+	#comments .col-sm-5 {
+		width:74%;
+	}
+}
 #comments form textarea {
-	width:600px;
+	width:100%;
+	display:block;
 	height:100px;
 	resize:vertical;
 }
@@ -281,9 +297,11 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	width:80px;
 	height:80px;
 }
-.width500 .cAuthor img {
-	width:40px;
-	height:40px;
+@media (max-width:500px) {
+	.comment .cAuthor img {
+		width:40px;
+		height:40px;
+	}
 }
 .comment .cAuthor .auth {
 	background:url(../img/middle_back.png) left top repeat;
@@ -295,15 +313,19 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	text-align:center;
 	line-height:18px;
 }
-.width500 .comment .cAuthor .auth {
-	font-size:10px;
-	line-height:12px;
+@media (max-width:500px) {
+	.comment .cAuthor .auth {
+		font-size:10px;
+		line-height:12px;
+	}
 }
 .comment .cText {
 	margin-left:95px;
 }
-.width500 .comment .cText {
-	margin-left:50px;
+@media (max-width:500px) {
+	.comment .cText {
+		margin-left:50px;
+	}
 }
 .comment .cDate {
 	font-size:10px;
