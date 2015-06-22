@@ -15,6 +15,7 @@ class MailManager extends \Sv\MailBundle\MailManager
 	{
 		$this->adminMail('Новый комментарий', 'adminComment', [
 			'comment' => $comment,
+			'commentUrl' => $this->c->getRouting()->getUrl('_post', ['id' => $comment->getPost()->getId()], true) . '#comment-' . $comment->getId(),
 		]);
 		/** @var Subscription $s */
 		foreach ($this->getCommentsSubscriptionManager()->getSubscribes($comment->getPost()) as $s) {
