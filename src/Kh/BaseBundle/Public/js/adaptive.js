@@ -12,4 +12,8 @@ $(document).ready(function() {
 	setInterval(function(){
 		$('#wrapper').css('paddingTop', $('#menu').outerHeight());
 	}, 500);
+
+	$('.catsLi select').change(function(){
+		window.location.href = $(this).val();
+	});
 });
