@@ -31,7 +31,9 @@ class CategoryManager extends ContainerAware
 		}
 
 		PostCategory::$connection->executeQuery('DELETE FROM post_category WHERE post_id = ' . $post->getId() . ' ' .
-			'AND category_id NOT IN (' . implode(',', array_keys($executed)) . ')'
+			(count($executed) ?
+				'AND category_id NOT IN (' . implode(',', array_keys($executed)) . ')' : ''
+			)
 		);
 	}
 
