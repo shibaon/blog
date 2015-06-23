@@ -15,7 +15,16 @@ class AdminPostController extends CrudController
 	{
 		return [
 			'id' => '#',
-			'title' => 'Заголовок',
+			'title' => [
+				'title' => 'Заголовок',
+				'value' => function(Post $post){
+					return [
+						'type' => 'link',
+						'href' => $this->c->getRouting()->getUrl('_post', ['id' => $post->getId()]),
+						'value' => $post->getTitle(),
+					];
+				}
+			],
 			'timestamp' => [
 				'title' => 'Дата',
 				'value' => function(Post $p) {
