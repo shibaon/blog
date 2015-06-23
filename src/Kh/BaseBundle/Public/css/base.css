@@ -254,7 +254,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .postPage .pDate {
 	color:#fff;
-	top:-16px;
+	position:relative;
+	top:-8px;
+	margin-bottom:4px;
 }
 .pRubs {
 	font-size:12px;
