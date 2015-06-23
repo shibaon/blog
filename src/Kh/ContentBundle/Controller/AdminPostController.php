@@ -22,6 +22,7 @@ class AdminPostController extends CrudController
 					return date('d.m.Y - H:i', $p->getTimestamp());
 				}
 			],
+			'published' => 'Опубликовано',
 		];
 	}
 
