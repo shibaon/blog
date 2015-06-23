@@ -57,7 +57,7 @@ class AdminPostController extends CrudController
 			->add('timestamp', 'timestamp', [
 				'label' => 'Дата публикации',
 				'withTime' => true,
-				'data' => $entity->getTimestamp(),
+				'data' => $entity->getId() ? $entity->getTimestamp() : time(),
 			])
 			->add('categories', 'hidden', [
 				'data' => implode(',', $postCategories),
