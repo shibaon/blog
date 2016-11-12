@@ -2,7 +2,10 @@
 
 namespace Kh\ContentBundle\Entity;
 
-class Post extends \Svi\Entity implements \Sv\CrudBundle\Entity\RemovableInterface
+use Svi\Crud\Entity\RemovableInterface;
+use Svi\Entity;
+
+class Post extends Entity implements RemovableInterface
 {
 	private $id;
 	private $title;
@@ -19,14 +22,14 @@ class Post extends \Svi\Entity implements \Sv\CrudBundle\Entity\RemovableInterfa
 	protected function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'title' => ['title', 'string', 'length' => 128],
-			'text' => ['text', 'text', 'null'],
-			'published' => ['published', 'boolean', 'index'],
-			'timestamp' => ['timestamp', 'integer', 'index'],
-			'alias' => ['alias', 'string', 'length' => 128, 'null', 'index'],
+			'id'            => ['id', 'integer', 'id'],
+			'title'         => ['title', 'string', 'length' => 128],
+			'text'          => ['text', 'text', 'null'],
+			'published'     => ['published', 'boolean', 'index'],
+			'timestamp'     => ['timestamp', 'integer', 'index'],
+			'alias'         => ['alias', 'string', 'length' => 128, 'null', 'index'],
 			'commentsCount' => ['comments_count', 'smallint'],
-			'removed' => ['removed', 'boolean', 'index'],
+			'removed'       => ['removed', 'boolean', 'index'],
 		];
 	}
 

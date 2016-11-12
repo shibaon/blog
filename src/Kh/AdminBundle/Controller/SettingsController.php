@@ -3,25 +3,25 @@
 namespace Kh\AdminBundle\Controller;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Sv\BaseBundle\Entity\Setting;
-use Sv\BaseBundle\Forms\Form;
+use Svi\Base\Entity\Setting;
+use Svi\Base\Forms\Form;
 
 class SettingsController extends CrudController
 {
 
 	public function indexAction()
 	{
-		$this->c->getSettingsManager()->updateDatabase();
+		$this->c->getSettingsService()->updateDatabase();
 
 		return parent::indexAction();
 	}
 
 	protected function buildForm(Form $form, $entity)
 	{
-		$type = $this->c->getSettingsManager()->getSettingType($entity->getKey());
+		$type = $this->c->getSettingsService()->getSettingType($entity->getKey());
 		if ($type == 'wysiwyg') {
 			$form->add('value', 'textarea', array(
-				'label' => $this->c->getSettingsManager()->getSettingName($entity->getKey()),
+				'label' => $this->c->getSettingsService()->getSettingName($entity->getKey()),
 				'data' => $entity->getValue(),
 				'required' => false,
 				'attr' => array(
@@ -30,7 +30,7 @@ class SettingsController extends CrudController
 			));
 		} else {
 			$form->add('value', $type, array(
-				'label' => $this->c->getSettingsManager()->getSettingName($entity->getKey()),
+				'label' => $this->c->getSettingsService()->getSettingName($entity->getKey()),
 				'data' => $entity->getValue(),
 				'required' => false,
 			));
@@ -40,10 +40,10 @@ class SettingsController extends CrudController
 
 	protected function modifyQuery(QueryBuilder $builder)
 	{
-		$keys = $this->c->getSettingsManager()->getSettingsKeys();
+		$keys = $this->c->getSettingsService()->getSettingsKeys();
 		$skeys = '';
 		$i = 0;
-		foreach ($this->c->getSettingsManager()->getSettingsKeys() as $key) {
+		foreach ($this->c->getSettingsService()->getSettingsKeys() as $key) {
 			$i++;
 			$skeys .= $builder->getConnection()->quote($key);
 			if (count($keys) != $i) {
@@ -59,12 +59,12 @@ class SettingsController extends CrudController
 
 	protected function getClassName()
 	{
-		return 'Sv\\BaseBundle\\Entity\\Setting';
+		return 'Svi\Base\Entity\Setting';
 	}
 
 	protected function getListColumns()
 	{
-		$settingsManager = $this->c->getSettingsManager();
+		$settingsManager = $this->c->getSettingsService();
 
 		return array(
 			'skey' => array(

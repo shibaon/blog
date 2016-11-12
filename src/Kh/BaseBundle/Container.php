@@ -2,89 +2,89 @@
 
 namespace Kh\BaseBundle;
 
-use Kh\CommentsBundle\CommentsManager;
-use Kh\CommentsBundle\CommentsSubscriptionManager;
-use Kh\ContentBundle\CategoryManager;
-use Kh\ContentBundle\PostManager;
-use Kh\PromoBundle\MenuManager;
-use Kh\MailBundle\MailManager;
-use Kh\PromoBundle\PageManager;
-use Kh\UserBundle\AuthorizationManager;
-use Kh\UserBundle\UserManager;
+use Kh\CommentsBundle\Service\CommentsService;
+use Kh\CommentsBundle\Service\CommentsSubscriptionService;
+use Kh\ContentBundle\Service\CategoryService;
+use Kh\ContentBundle\Service\PostService;
+use Kh\MailBundle\Service\MailService;
+use Kh\PromoBundle\Service\MenuService;
+use Kh\PromoBundle\Service\PageService;
+use Kh\UserBundle\Service\AuthorizationService;
+use Kh\UserBundle\Service\UserService;
 
-class Container extends \Sv\BaseBundle\Container
+class Container extends \Svi\Base\Container
 {
 
 	/**
-	 * @return UserManager
+	 * @return UserService
 	 */
-	public function getUserManager()
+	public function getUserService()
 	{
-		return $this->getApp()->get('manager.user');
+		return $this->getApp()->get('service.user');
 	}
 
 	/**
-	 * @return MailManager
+	 * @return MailService
 	 */
-	public function getMailManager()
+	public function getMailService()
 	{
-		return $this->getApp()->get('manager.mail');
+		return $this->getApp()->get('service.mail');
 	}
 
 	/**
-	 * @return MenuManager
+	 * @return MenuService
 	 */
-	public function getMenuManager()
+	public function getMenuService()
 	{
-		return $this->getApp()->get('manager.menu');
+		return $this->getApp()->get('service.menu');
 	}
 
 	/**
-	 * @return PageManager
+	 * @return PageService
 	 */
-	public function getPageManager()
+	public function getPageService()
 	{
-		return $this->getApp()->get('manager.page');
+		return $this->getApp()->get('service.page');
 	}
 
 	/**
-	 * @return AuthorizationManager
+	 * @return AuthorizationService
 	 */
-	public function getAuthorizationManager()
+	public function getAuthorizationService()
 	{
-		return $this->getApp()->get('manager.authorization');
+		return $this->getApp()->get('service.authorization');
 	}
 
 	/**
-	 * @return PostManager
+	 * @return PostService
 	 */
-	public function getPostManager()
+	public function getPostService()
 	{
-		return $this->getApp()->get('manager.post');
+		return $this->getApp()->get('service.post');
 	}
 
 	/**
-	 * @return CategoryManager
+	 * @return CategoryService
 	 */
-	public function getCategoryManager()
+	public function getCategoryService()
 	{
-		return $this->getApp()->get('manager.category');
+		return $this->getApp()->get('service.category');
 	}
 
 	/**
-	 * @return CommentsManager
+	 * @return CommentsService
 	 */
-	public function getCommentsManager()
+	public function getCommentsService()
 	{
-		return $this->getApp()->get('manager.comments');
+		return $this->getApp()->get('service.comments');
 	}
 
 	/**
-	 * @return CommentsSubscriptionManager
+	 * @return CommentsSubscriptionService
 	 */
-	public function getCommentsSubscriptionManager()
+	public function getCommentsSubscriptionService()
 	{
-		return $this->getApp()->get('manager.comments_subscription');
+		return $this->getApp()->get('service.comments_subscription');
 	}
 
 } 

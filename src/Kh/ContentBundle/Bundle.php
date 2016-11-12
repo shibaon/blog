@@ -33,11 +33,11 @@ class Bundle extends \Svi\Bundle
 		];
 	}
 
-	protected function getManagers()
+	protected function getServices()
 	{
 		return [
-			'post' => 'Post',
-			'category' => 'Category',
+			'service.post' => 'Service\PostService',
+			'service.category' => 'Service\CategoryService',
 		];
 	}
 

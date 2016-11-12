@@ -3,7 +3,7 @@
 namespace Kh\ContentBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
-use Sv\BaseBundle\Utils\Paginator;
+use Svi\Base\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -12,12 +12,12 @@ class CategoryController extends Controller
 
 	public function indexAction($id, Request $request)
 	{
-		if (!($category = $this->c->getCategoryManager()->getCategory($id))) {
+		if (!($category = $this->c->getCategoryService()->getCategory($id))) {
 			throw new NotFoundHttpException;
 		}
 
-		$paginator = new Paginator($this->c->getPostManager()->getPostsCount($category), 10, $request);
-		$posts = $this->c->getPostManager()->getPosts($category, null, $paginator->getCurrentPage(), $paginator->getItemsPerPage());
+		$paginator = new Paginator($this->c->getPostService()->getPostsCount($category), 10, $request);
+		$posts = $this->c->getPostService()->getPosts($category, null, $paginator->getCurrentPage(), $paginator->getItemsPerPage());
 
 		$category->setPostsCount($paginator->getTotalItems())->save();
 

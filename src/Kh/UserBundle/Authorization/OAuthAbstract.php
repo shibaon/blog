@@ -4,7 +4,7 @@ namespace Kh\UserBundle\Authorization;
 
 use Kh\BaseBundle\ContainerAware;
 use Kh\UserBundle\Entity\User;
-use Kh\UserBundle\UserManager;
+use Kh\UserBundle\UserService;
 use Sv\BaseBundle\SettingsManager;
 use Svi\Application;
 
@@ -62,11 +62,11 @@ abstract class OAuthAbstract extends ContainerAware
 	}
 
 	/**
-	 * @return UserManager
+	 * @return UserService
 	 */
 	protected function getUserManager()
 	{
-		return $this->c->getUserManager();
+		return $this->c->getUserService();
 	}
 
 	/**

@@ -4,7 +4,7 @@ namespace Kh\BaseBundle;
 
 use Svi\Application;
 
-class ContainerAware extends \Sv\BaseBundle\ContainerAware
+class ContainerAware extends \Svi\Base\ContainerAware
 {
 	/**
 	 * @var Container

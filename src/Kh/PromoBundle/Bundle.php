@@ -41,11 +41,11 @@ class Bundle extends \Svi\Bundle
 		];
 	}
 
-	protected function getManagers()
+	protected function getServices()
 	{
 		return [
-			'menu' => 'Menu',
-			'page' => 'Page',
+			'service.menu' => 'Service\MenuService',
+			'service.page' => 'Service\PageService',
 		];
 	}
 

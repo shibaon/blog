@@ -5,7 +5,7 @@ namespace Kh\BaseBundle\Controller;
 use Kh\BaseBundle\Container;
 use Svi\Application;
 
-class Controller extends \Sv\BaseBundle\Controller\Controller
+class Controller extends \Svi\Base\Controller\Controller
 {
 	/**
 	 * @var Container
@@ -20,28 +20,28 @@ class Controller extends \Sv\BaseBundle\Controller\Controller
 	protected function getTemplateParameters(array $parameters = [])
 	{
 		return $parameters + [
-			'sitename' => $this->c->getSettingsManager()->get('sitename'),
+			'sitename' => $this->c->getSettingsService()->get('sitename'),
 			'siteurl' => $this->getParameter('siteurl'),
-			'sitedescription' => $this->c->getSettingsManager()->get('sitedescription'),
-			'currentUser' => $this->c->getUserManager()->getCurrentUser(),
-			'currentAdmin' => $this->c->getUserManager()->getCurrentAdmin(),
-			'alerts' => $this->c->getAlertsManager()->getAlerts(),
-			'menu' => $this->c->getMenuManager()->getMenuTree(),
+			'sitedescription' => $this->c->getSettingsService()->get('sitedescription'),
+			'currentUser' => $this->c->getUserService()->getCurrentUser(),
+			'currentAdmin' => $this->c->getUserService()->getCurrentAdmin(),
+			'alerts' => $this->c->getAlertsService()->getAlerts(),
+			'menu' => $this->c->getMenuService()->getMenuTree(),
 			'soc' => [
-				'twitter' => $this->c->getSettingsManager()->get('soc.twitter'),
-				'vk' => $this->c->getSettingsManager()->get('soc.vk'),
-				'webmaster' => $this->c->getSettingsManager()->get('webmaster'),
+				'twitter' => $this->c->getSettingsService()->get('soc.twitter'),
+				'vk' => $this->c->getSettingsService()->get('soc.vk'),
+				'webmaster' => $this->c->getSettingsService()->get('webmaster'),
 			],
 			'header' => array(
-				'title' => $this->c->getSettingsManager()->get('sitename'),
-				'motto' => $this->c->getSettingsManager()->get('motto'),
-				'categories' => $this->c->getCategoryManager()->getCategories(),
+				'title' => $this->c->getSettingsService()->get('sitename'),
+				'motto' => $this->c->getSettingsService()->get('motto'),
+				'categories' => $this->c->getCategoryService()->getCategories(),
 			),
 			'footer' => [
-				'copyright' => $this->c->getSettingsManager()->get('copyright'),
-				'counters' => $this->c->getSettingsManager()->get('counters'),
+				'copyright' => $this->c->getSettingsService()->get('copyright'),
+				'counters' => $this->c->getSettingsService()->get('counters'),
 			],
-			'counters' => $this->c->getSettingsManager()->get('counters'),
+			'counters' => $this->c->getSettingsService()->get('counters'),
 		];
 	}
 

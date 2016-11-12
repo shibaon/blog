@@ -11,8 +11,8 @@ class PostController extends Controller
 
 	public function indexAction($id, Request $request)
 	{
-		$user = $this->c->getUserManager()->getCurrentUser();
-		if (!($post = $this->c->getPostManager()->getPost($id))) {
+		$user = $this->c->getUserService()->getCurrentUser();
+		if (!($post = $this->c->getPostService()->getPost($id))) {
 			throw new NotFoundHttpException;
 		}
 		if ((!$post->getPublished() && !$user->isAdmin()) || $post->getRemoved()) {
@@ -60,14 +60,14 @@ class PostController extends Controller
 				'label' => 'Оставить комментарий (Ctrl + Enter)',
 			]);
 
-		if ($comment = $this->c->getCommentsManager()->processCommentForm($commentForm, $post)) {
-			$this->c->getAlertsManager()->addAlert('success', 'Комментарий успешно добавлен');
+		if ($comment = $this->c->getCommentsService()->processCommentForm($commentForm, $post)) {
+			$this->c->getAlertsService()->addAlert('success', 'Комментарий успешно добавлен');
 
 			return $this->redirectToUrl($request->getRequestUri() . '#comment-' . $comment->getId());
 		}
 
 		return $this->render('index', $this->getTemplateParameters([
-			'post' => $this->c->getPostManager()->getPostForTemplate($post),
+			'post' => $this->c->getPostService()->getPostForTemplate($post),
 			'form' => $commentForm,
 		]));
 	}

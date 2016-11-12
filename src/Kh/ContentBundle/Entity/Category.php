@@ -8,7 +8,7 @@ class Category extends Entity
 {
 	private $id;
 	private $name;
-	private $postsCount;
+	private $postsCount = 0;
 
 	/**
 	 * Must return fields in like that: classFieldName => Column schema
@@ -16,8 +16,8 @@ class Category extends Entity
 	protected function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'name' => ['name', 'string', 'length' => 64],
+			'id'         => ['id', 'integer', 'id'],
+			'name'       => ['name', 'string', 'length' => 64],
 			'postsCount' => ['posts_count', 'smallint'],
 		];
 	}
@@ -89,7 +89,7 @@ class Category extends Entity
 
 	function __toString()
 	{
-		return $this->getName();
+		return $this->getName() . '';
 	}
 
 }

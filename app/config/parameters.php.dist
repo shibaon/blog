@@ -21,10 +21,10 @@
 			'encryption' => 'ssl',                    // Used only for smtp
 			'user' => 'example@example.com',          // Used only for smtp
 			'password' => 'Jgfdhjerj23fjsdig',        // Used only for smtp
-			'spool' => 'app/cache/mail',              // Dir related to root where spool is stored
+			'spool' => null, //'app/cache/mail',              // Dir related to root where spool is stored
 			'spoolTimeLimit' => null,                 // Used only if spool is setted
 			'spoolMessageLimit' => 10,                // Used only if spool is setted
 		],
-		'secret' => '1673449e57dbda5795210c53c3854284',
-		'siteurl' => 'khakasia.pw',
+		'secret' => '5210e5453c37dbdac416738542849579',
+		'siteurl' => 'shibanov.com',
 	);

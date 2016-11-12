@@ -1,19 +1,16 @@
 <?php
 	return [
-		'Sv' => [
-			'Base',
-			'Crud',
-			'File',
-			'Mail',
-		],
-		'Kh' => [
-			'Admin',
-			'Base',
-			'User',
-			'Mail',
-			'Content',
-			'Comments',
+		'Svi\Base\Bundle',
+		'Svi\Mail\Bundle',
+		'Svi\Crud\Bundle',
+		'Svi\File\Bundle',
 
-			'Promo',
-		],
+		'Kh\AdminBundle\Bundle',
+		'Kh\BaseBundle\Bundle',
+		'Kh\UserBundle\Bundle',
+		'Kh\MailBundle\Bundle',
+		'Kh\ContentBundle\Bundle',
+		'Kh\CommentsBundle\Bundle',
+
+		'Kh\PromoBundle\Bundle',
 	];

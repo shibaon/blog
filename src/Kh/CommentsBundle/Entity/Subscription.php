@@ -17,10 +17,10 @@ class Subscription extends Entity
 	protected function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'email' => ['email', 'string', 'length' => 64],
+			'id'     => ['id', 'integer', 'id'],
+			'email'  => ['email', 'string', 'length' => 64],
 			'postId' => ['post_id', 'integer', 'index'],
-			'hash' => ['hash', 'string', 'length' => 32],
+			'hash'   => ['hash', 'string', 'length' => 32],
 		];
 	}
 

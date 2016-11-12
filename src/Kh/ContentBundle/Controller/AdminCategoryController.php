@@ -4,7 +4,7 @@ namespace Kh\ContentBundle\Controller;
 
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
-use Sv\BaseBundle\Forms\Form;
+use Svi\Base\Forms\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -45,7 +45,7 @@ class AdminCategoryController extends CrudController
 			}
 			$this->c->getCategoryManager()->deleteCategory($category, $moveTo);
 
-			$this->c->getAlertsManager()->addAlert('success', 'Категория удалена');
+			$this->c->getAlertsService()->addAlert('success', 'Категория удалена');
 
 			return $this->crudRedirect();
 		}

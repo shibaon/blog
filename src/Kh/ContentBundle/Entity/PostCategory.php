@@ -16,8 +16,8 @@ class PostCategory extends Entity
 	protected function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'postId' => ['post_id', 'integer', 'index'],
+			'id'         => ['id', 'integer', 'id'],
+			'postId'     => ['post_id', 'integer', 'index'],
 			'categoryId' => ['category_id', 'integer', 'index'],
 		];
 	}

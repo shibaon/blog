@@ -2,7 +2,9 @@
 
 namespace Kh\PromoBundle\Entity;
 
-class Page extends \Svi\Entity
+use Svi\Entity;
+
+class Page extends Entity
 {
 	private $id;
 	private $title;
@@ -16,10 +18,10 @@ class Page extends \Svi\Entity
 	public function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'title' => ['title', 'string', 'length' => 128],
-			'text' => ['text', 'text', 'null'],
-			'uri' => ['uri', 'string', 'length' => 64, 'null'],
+			'id'        => ['id', 'integer', 'id'],
+			'title'     => ['title', 'string', 'length' => 128],
+			'text'      => ['text', 'text', 'null'],
+			'uri'       => ['uri', 'string', 'length' => 64, 'null'],
 			'published' => ['published', 'boolean'],
 		];
 	}

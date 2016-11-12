@@ -12,7 +12,7 @@ class RssController extends Controller
 	{
 		return $this->render('index', $this->getTemplateParameters([
 			'webmaster' => $this->c->getSettingsManager()->get('webmaster'),
-			'posts' => $this->c->getPostManager()->getPosts(null, null, 0, 10),
+			'posts' => $this->c->getPostService()->getPosts(null, null, 0, 10),
 		]));
 	}
 

@@ -2,9 +2,10 @@
 
 namespace Kh\PromoBundle\Entity;
 
-use Sv\CrudBundle\Entity\NestedSortableInterface;
+use Svi\Crud\Entity\NestedSortableInterface;
+use Svi\Entity;
 
-class Menu extends \Svi\Entity implements NestedSortableInterface
+class Menu extends Entity implements NestedSortableInterface
 {
 	private $id;
 	private $title;
@@ -18,10 +19,10 @@ class Menu extends \Svi\Entity implements NestedSortableInterface
 	public function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'title' => ['title', 'string', 'length' => 32],
-			'url' => ['url', 'string', 'length' => 128, 'null'],
-			'weight' => ['weight', 'smallint', 'null'],
+			'id'       => ['id', 'integer', 'id'],
+			'title'    => ['title', 'string', 'length' => 32],
+			'url'      => ['url', 'string', 'length' => 128, 'null'],
+			'weight'   => ['weight', 'smallint', 'null'],
 			'parentId' => ['parent_id', 'integer', 'null'],
 		];
 	}
@@ -43,6 +44,7 @@ class Menu extends \Svi\Entity implements NestedSortableInterface
 	{
 		return $this->id;
 	}
+
 	/**
 	 * @param mixed $id
 	 * @return Menu
@@ -50,6 +52,7 @@ class Menu extends \Svi\Entity implements NestedSortableInterface
 	public function setId($id)
 	{
 		$this->id = $id;
+
 		return $this;
 	}
 

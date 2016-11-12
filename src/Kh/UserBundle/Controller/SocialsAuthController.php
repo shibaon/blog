@@ -9,32 +9,32 @@ class SocialsAuthController extends Controller
 
 	public function fbGoAction()
 	{
-		return $this->redirectToUrl($this->c->getAuthorizationManager()->getFb()->getAuthorizationLink());
+		return $this->redirectToUrl($this->c->getAuthorizationService()->getFb()->getAuthorizationLink());
 	}
 
 	public function fbAction()
 	{
-		return $this->getReturn(array($this->c->getAuthorizationManager()->getFb(), 'authorizationAction'));
+		return $this->getReturn(array($this->c->getAuthorizationService()->getFb(), 'authorizationAction'));
 	}
 
 	public function vkGoAction()
 	{
-		return $this->redirectToUrl($this->c->getAuthorizationManager()->getVk()->getAuthorizationLink());
+		return $this->redirectToUrl($this->c->getAuthorizationService()->getVk()->getAuthorizationLink());
 	}
 
 	public function vkAction()
 	{
-		return $this->getReturn(array($this->c->getAuthorizationManager()->getVk(), 'authorizationAction'));
+		return $this->getReturn(array($this->c->getAuthorizationService()->getVk(), 'authorizationAction'));
 	}
 
 	public function twitterGoAction()
 	{
-		return $this->redirectToUrl($this->c->getAuthorizationManager()->getTwitter()->getAuthorizationLink());
+		return $this->redirectToUrl($this->c->getAuthorizationService()->getTwitter()->getAuthorizationLink());
 	}
 
 	public function twitterAction()
 	{
-		return $this->getReturn(array($this->c->getAuthorizationManager()->getTwitter(), 'authorizationAction'));
+		return $this->getReturn(array($this->c->getAuthorizationService()->getTwitter(), 'authorizationAction'));
 	}
 
 	protected function getReturn($callback, $exception = false)
@@ -50,11 +50,11 @@ class SocialsAuthController extends Controller
 		}
 
 		if ($exception) {
-			$this->c->getAlertsManager()->addAlert('danger', 'Авторизация через социальную сеть не удалась');
+			$this->c->getAlertsService()->addAlert('danger', 'Авторизация через социальную сеть не удалась');
 		} else {
-			$this->c->getAlertsManager()->addAlert('success', 'Вы успешно авторизовались');
+			$this->c->getAlertsService()->addAlert('success', 'Вы успешно авторизовались');
 		}
-		$curUser = $this->c->getUserManager()->getCurrentUser();
+		$curUser = $this->c->getUserService()->getCurrentUser();
 		if ($request->query->has('back')) {
 			return $this->redirectToUrl($request->query->get('back'));
 		}

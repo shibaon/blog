@@ -18,11 +18,11 @@ class Bundle extends \Svi\Bundle
 		];
 	}
 
-	protected function getManagers()
+	protected function getServices()
 	{
 		return [
-			'comments' => 'Comments',
-			'comments_subscription' => 'CommentsSubscription',
+			'service.comments' => 'Service\CommentsService',
+			'service.comments_subscription' => 'Service\CommentsSubscriptionService',
 		];
 	}
 

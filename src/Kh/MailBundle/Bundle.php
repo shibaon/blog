@@ -5,10 +5,10 @@ namespace Kh\MailBundle;
 class Bundle extends \Svi\Bundle
 {
 
-	protected function getManagers()
+	protected function getServices()
 	{
 		return [
-			'mail' => 'Mail',
+			'service.mail' => 'Service\MailService',
 		];
 	}
 

@@ -5,7 +5,7 @@ namespace Kh\AdminBundle\Controller;
 use Kh\BaseBundle\Container;
 use Svi\Application;
 
-abstract class CrudController extends \Sv\CrudBundle\Controller\CrudController
+abstract class CrudController extends \Svi\Crud\Controller\CrudController
 {
 	/**
 	 * @var Container
@@ -19,11 +19,11 @@ abstract class CrudController extends \Sv\CrudBundle\Controller\CrudController
 
 	protected function getTemplateParameters(array $parameters = [])
 	{
-	$currentUser = $this->c->getUserManager()->getCurrentEditor();
+		$currentUser = $this->c->getUserService()->getCurrentEditor();
 
 		return parent::getTemplateParameters($parameters) + [
-			'alerts' => $this->c->getAlertsManager()->getAlerts(),
-			'currentUser' => $this->c->getUserManager()->getCurrentAdmin(),
+			'alerts' => $this->c->getAlertsService()->getAlerts(),
+			'currentUser' => $this->c->getUserService()->getCurrentAdmin(),
 			'adminMenu' => Controller::getMenu(),
 		];
 	}

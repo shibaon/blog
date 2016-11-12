@@ -5,7 +5,7 @@ namespace Kh\ContentBundle\Controller;
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
 use Kh\ContentBundle\Entity\Post;
-use Sv\BaseBundle\Forms\Form;
+use Svi\Base\Forms\Form;
 use Svi\Entity;
 
 class AdminPostController extends CrudController
@@ -43,7 +43,7 @@ class AdminPostController extends CrudController
 	{
 		$postCategories = [];
 		/** @var Category $c */
-		foreach ($this->c->getCategoryManager()->getPostCategories($entity) as $c) {
+		foreach ($this->c->getCategoryService()->getPostCategories($entity) as $c) {
 			$postCategories[] = $c->getId();
 		}
 
@@ -86,7 +86,7 @@ class AdminPostController extends CrudController
 		$form->remove('categories');
 		parent::save($entity, $form, $exclude);
 
-		$this->c->getCategoryManager()->setPostCategories($entity, explode(',', $categoriesString));
+		$this->c->getCategoryService()->setPostCategories($entity, explode(',', $categoriesString));
 	}
 
 	protected function getEditTemplate()
@@ -99,7 +99,7 @@ class AdminPostController extends CrudController
 		$categories = [];
 
 		/** @var Category $c */
-		foreach ($this->c->getCategoryManager()->getCategories() as $c) {
+		foreach ($this->c->getCategoryService()->getCategories() as $c) {
 			$categories[] = ['id' => $c->getId(), 'name' => $c->getName()];
 		}
 

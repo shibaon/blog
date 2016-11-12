@@ -25,18 +25,18 @@ class User extends Entity
 	protected function getFields()
 	{
 		return [
-			'id' =>             ['id', 'integer', 'id'],
-			'role' =>           ['role', 'string', 'length' => 16],
-			'email' =>          ['email', 'string', 'length' => 64, 'index', 'null'],
-			'password' =>       ['password', 'string', 'length' => 128, 'null'],
-			'name' => ['name', 'string', 'length' => 64],
-			'confirmationHash' => ['confirmation_hash', 'string', 'length' => 32, 'null'],
-			'restoreHash' =>    ['restore_hash', 'string', 'length' => 32, 'null'],
-			'registerTimestamp' => 	['register_timestamp', 'integer'],
-			'twitterId' => ['twitter_id', 'string', 'length' => 32, 'null', 'index'],
-			'vkId' => ['vk_id', 'string', 'length' => 32, 'null', 'index'],
-			'fbId' => ['fb_id', 'string', 'length' => 32, 'null', 'index'],
-			'url' => ['url', 'string', 'length' => 128, 'null'],
+			'id'                => ['id', 'integer', 'id'],
+			'role'              => ['role', 'string', 'length' => 16],
+			'email'             => ['email', 'string', 'length' => 64, 'index', 'null'],
+			'password'          => ['password', 'string', 'length' => 128, 'null'],
+			'name'              => ['name', 'string', 'length' => 64],
+			'confirmationHash'  => ['confirmation_hash', 'string', 'length' => 32, 'null'],
+			'restoreHash'       => ['restore_hash', 'string', 'length' => 32, 'null'],
+			'registerTimestamp' => ['register_timestamp', 'integer'],
+			'twitterId'         => ['twitter_id', 'string', 'length' => 32, 'null', 'index'],
+			'vkId'              => ['vk_id', 'string', 'length' => 32, 'null', 'index'],
+			'fbId'              => ['fb_id', 'string', 'length' => 32, 'null', 'index'],
+			'url'               => ['url', 'string', 'length' => 128, 'null'],
 		];
 	}
 
@@ -55,12 +55,14 @@ class User extends Entity
 	public function setConfirmationHash($confirmationHash)
 	{
 		$this->confirmationHash = $confirmationHash;
+
 		return $this;
 	}
 
 	public function resetConfirmationHash()
 	{
 		$this->setConfirmationHash(md5(microtime(true) . time() . $this->getEmail()));
+
 		return $this;
 	}
 
@@ -79,6 +81,7 @@ class User extends Entity
 	public function setEmail($email)
 	{
 		$this->email = $email;
+
 		return $this;
 	}
 
@@ -97,6 +100,7 @@ class User extends Entity
 	public function setId($id)
 	{
 		$this->id = $id;
+
 		return $this;
 	}
 
@@ -115,6 +119,7 @@ class User extends Entity
 	public function setPassword($password)
 	{
 		$this->password = $password;
+
 		return $this;
 	}
 
@@ -133,6 +138,7 @@ class User extends Entity
 	public function setRegisterTimestamp($registerTimestamp)
 	{
 		$this->registerTimestamp = $registerTimestamp;
+
 		return $this;
 	}
 
@@ -156,6 +162,7 @@ class User extends Entity
 	public function setRestoreHash($restoreHash)
 	{
 		$this->restoreHash = $restoreHash;
+
 		return $this;
 	}
 
@@ -165,6 +172,7 @@ class User extends Entity
 	public function resetRestoreHash()
 	{
 		$this->setRestoreHash(md5($this->getEmail() . microtime(true) . time()));
+
 		return $this;
 	}
 
@@ -183,6 +191,7 @@ class User extends Entity
 	public function setRole($role)
 	{
 		$this->role = $role;
+
 		return $this;
 	}
 
@@ -211,6 +220,7 @@ class User extends Entity
 	public function setName($name)
 	{
 		$this->name = $name;
+
 		return $this;
 	}
 

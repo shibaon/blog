@@ -1,0 +1,17 @@
+{
+  "require": {
+    "silex/silex": ">=2.0.2",
+    "doctrine/dbal": ">=2.5.4",
+    "twig/twig": ">=1.24",
+    "swiftmailer/swiftmailer": ">=5.4.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Svi\\": "vendor/svi/system/src",
+      "Svi\\Base\\": "vendor/svi/base/src",
+      "Svi\\Crud\\": "vendor/svi/crud/src",
+      "Svi\\File\\": "vendor/svi/file/src",
+      "Svi\\Mail\\": "vendor/svi/mail/src"
+    }
+  }
+}

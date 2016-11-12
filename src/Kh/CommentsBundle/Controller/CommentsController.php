@@ -4,7 +4,7 @@ namespace Kh\CommentsBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
 use Kh\CommentsBundle\Entity\Comment;
-use Sv\BaseBundle\Utils\Paginator;
+use Svi\Base\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommentsController extends Controller
@@ -23,7 +23,7 @@ class CommentsController extends Controller
 		$comments = [];
 		/** @var Comment $c */
 		foreach (Comment::fetch($db) as $c) {
-			$comments[] = $this->c->getCommentsManager()->getCommentForTemplate($c);
+			$comments[] = $this->c->getCommentsService()->getCommentForTemplate($c);
 		}
 
 		return $this->render('index', $this->getTemplateParameters([
@@ -34,17 +34,17 @@ class CommentsController extends Controller
 
 	public function deleteAction(Request $request)
 	{
-		if (!($user = $this->c->getUserManager()->getCurrentUser()) || !$user->isAdmin()) {
+		if (!($user = $this->c->getUserService()->getCurrentUser()) || !$user->isAdmin()) {
 			return $this->jsonError();
 		}
 		$data = $request->request->all();
 
-		if (!($comment = $this->c->getCommentsManager()->getComment($data['cid']))) {
+		if (!($comment = $this->c->getCommentsService()->getComment($data['cid']))) {
 			return $this->jsonError();
 		}
 
 		$comment->delete();
-		$this->c->getCommentsManager()->updatePostCommentsCount($comment->getPost());
+		$this->c->getCommentsService()->updatePostCommentsCount($comment->getPost());
 
 		return $this->jsonSuccess();
 	}

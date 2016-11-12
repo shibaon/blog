@@ -24,15 +24,15 @@ class Comment extends Entity
 	protected function getFields()
 	{
 		return [
-			'id' => ['id', 'integer', 'id'],
-			'userId' => ['user_id', 'integer', 'index', 'null'],
-			'author' => ['author', 'string', 'length' => 32, 'null'],
-			'email' => ['email', 'string', 'length' => 64, 'null'],
-			'url' => ['url', 'string', 'length' => 64, 'null'],
+			'id'        => ['id', 'integer', 'id'],
+			'userId'    => ['user_id', 'integer', 'index', 'null'],
+			'author'    => ['author', 'string', 'length' => 32, 'null'],
+			'email'     => ['email', 'string', 'length' => 64, 'null'],
+			'url'       => ['url', 'string', 'length' => 64, 'null'],
 			'timestamp' => ['timestamp', 'integer', 'index'],
-			'ip' => ['ip', 'string', 'length' => 14],
-			'text' => ['text', 'text', 'null'],
-			'postId' => ['post_id', 'integer', 'index'],
+			'ip'        => ['ip', 'string', 'length' => 14],
+			'text'      => ['text', 'text', 'null'],
+			'postId'    => ['post_id', 'integer', 'index'],
 		];
 	}
 

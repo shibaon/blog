@@ -16,7 +16,7 @@ class Bundle extends \Svi\Bundle
 		$app->getSilex()->before(function(Request $request){
 			if (
 				preg_match('/^\\/admin.*/', $request->getRequestUri()) &&
-				!$this->getApp()->get('manager.user')->getCurrentAdmin()
+				!$this->getApp()->get('service.user')->getCurrentAdmin()
 			) {
 				return $this->getApp()->getSilex()->redirect($this->getApp()->getRouting()->getUrl('_login'));
 			}
