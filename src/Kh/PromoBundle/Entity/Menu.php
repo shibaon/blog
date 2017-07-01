@@ -14,28 +14,6 @@ class Menu extends Entity implements NestedSortableInterface
 	private $parentId;
 
 	/**
-	 * Must return fields in like that: DB_field_name => classFieldName
-	 */
-	public function getFields()
-	{
-		return [
-			'id'       => ['id', 'integer', 'id'],
-			'title'    => ['title', 'string', 'length' => 32],
-			'url'      => ['url', 'string', 'length' => 128, 'null'],
-			'weight'   => ['weight', 'smallint', 'null'],
-			'parentId' => ['parent_id', 'integer', 'null'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'menu';
-	}
-
-	/**
 	 * Get id
 	 *
 	 * @return integer

@@ -11,26 +11,6 @@ class PostCategory extends Entity
 	private $categoryId;
 
 	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'         => ['id', 'integer', 'id'],
-			'postId'     => ['post_id', 'integer', 'index'],
-			'categoryId' => ['category_id', 'integer', 'index'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'post_category';
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getId()

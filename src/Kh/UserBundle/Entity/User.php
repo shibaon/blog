@@ -20,35 +20,6 @@ class User extends Entity
 	private $url;
 
 	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'                => ['id', 'integer', 'id'],
-			'role'              => ['role', 'string', 'length' => 16],
-			'email'             => ['email', 'string', 'length' => 64, 'index', 'null'],
-			'password'          => ['password', 'string', 'length' => 128, 'null'],
-			'name'              => ['name', 'string', 'length' => 64],
-			'confirmationHash'  => ['confirmation_hash', 'string', 'length' => 32, 'null'],
-			'restoreHash'       => ['restore_hash', 'string', 'length' => 32, 'null'],
-			'registerTimestamp' => ['register_timestamp', 'integer'],
-			'twitterId'         => ['twitter_id', 'string', 'length' => 32, 'null', 'index'],
-			'vkId'              => ['vk_id', 'string', 'length' => 32, 'null', 'index'],
-			'fbId'              => ['fb_id', 'string', 'length' => 32, 'null', 'index'],
-			'url'               => ['url', 'string', 'length' => 128, 'null'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'user';
-	}
-
-	/**
 	 * @param mixed $confirmationHash
 	 * @return User
 	 */

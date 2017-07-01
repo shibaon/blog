@@ -17,31 +17,6 @@ class Post extends Entity implements RemovableInterface
 	private $removed = false;
 
 	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'            => ['id', 'integer', 'id'],
-			'title'         => ['title', 'string', 'length' => 128],
-			'text'          => ['text', 'text', 'null'],
-			'published'     => ['published', 'boolean', 'index'],
-			'timestamp'     => ['timestamp', 'integer', 'index'],
-			'alias'         => ['alias', 'string', 'length' => 128, 'null', 'index'],
-			'commentsCount' => ['comments_count', 'smallint'],
-			'removed'       => ['removed', 'boolean', 'index'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'post';
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getId()

@@ -6,6 +6,8 @@ use Kh\BaseBundle\ContainerAware;
 use Kh\ContentBundle\Entity\Category;
 use Kh\ContentBundle\Entity\Post;
 use Kh\ContentBundle\Entity\PostCategory;
+use Kh\ContentBundle\Manager\CategoryManager;
+use Kh\ContentBundle\Manager\PostCategoryManager;
 
 class CategoryService extends ContainerAware
 {
@@ -65,12 +67,12 @@ class CategoryService extends ContainerAware
 	 */
 	public function getCategory($id)
 	{
-		return Category::findOneById($id);
+		return CategoryManager::getInstance()->findOneById($id);
 	}
 
 	public function getCategories()
 	{
-		return Category::findBy([], ['name' => 'asc']);
+		return CategoryManager::getInstance()->findBy([], ['name' => 'asc']);
 	}
 
 	public function getCategoriesForSelect()
@@ -88,7 +90,7 @@ class CategoryService extends ContainerAware
 	{
 		$result = [];
 		/** @var PostCategory $pc */
-		foreach (PostCategory::findByPostId($post->getId()) as $pc) {
+		foreach (PostCategoryManager::getInstance()->findByPostId($post->getId()) as $pc) {
 			$result[] = $pc->getCategory();
 		}
 

@@ -1,16 +1,19 @@
 <?php
 	return array(
+		'assetsVersion' => 'v1',
 		'debug' => true,
-		'db' => array(
-			'driver' => 'pdo_mysql',
-			'charset' => 'utf8',
-			'host' => 'localhost',
-			//'path' => 'app/base' # only for pdo_sqlite
-			//'port' => 43434 # default
-			'dbname' => 'silex',
-			'user' => 'silex',
-			'password' => 'qdLrZfnQt544sW9c',
-		),
+		'dbs' => [
+			'default' => [
+				'driver' => 'pdo_mysql',
+				'charset' => 'utf8',
+				'host' => 'localhost',
+				//'path' => 'app/base' # only for pdo_sqlite
+				//'port' => 43434 # default
+				'dbname' => 'silex',
+				'user' => 'silex',
+				'password' => 'qdLrZfnQt544sW9c',
+			]
+		],
 		'twig' => [
 			'strict_variables' => false,
 		],
@@ -21,10 +24,10 @@
 			'encryption' => 'ssl',                    // Used only for smtp
 			'user' => 'example@example.com',          // Used only for smtp
 			'password' => 'Jgfdhjerj23fjsdig',        // Used only for smtp
-			'spool' => null, //'app/cache/mail',              // Dir related to root where spool is stored
+			'spool' => 'app/cache/mail',              // Dir related to root where spool is stored
 			'spoolTimeLimit' => null,                 // Used only if spool is setted
 			'spoolMessageLimit' => 10,                // Used only if spool is setted
 		],
-		'secret' => '5210e5453c37dbdac416738542849579',
-		'siteurl' => 'shibanov.com',
+		'secret' => 'GENERATE THIS KEY',
+		'siteurl' => 'example.com',
 	);

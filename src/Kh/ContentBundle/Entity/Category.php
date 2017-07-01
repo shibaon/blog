@@ -11,26 +11,6 @@ class Category extends Entity
 	private $postsCount = 0;
 
 	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'         => ['id', 'integer', 'id'],
-			'name'       => ['name', 'string', 'length' => 64],
-			'postsCount' => ['posts_count', 'smallint'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'category';
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getPostsCount()

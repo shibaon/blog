@@ -3,6 +3,7 @@
 namespace Kh\UserBundle\Service;
 
 use Kh\UserBundle\Entity\User;
+use Kh\UserBundle\Manager\UserManager;
 
 class UserService extends \Svi\Base\Service\UserService
 {
@@ -23,7 +24,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserById($id)
 	{
-		return User::findOneById($id);
+		return UserManager::getInstance()->findOneById($id);
 	}
 
 	/**
