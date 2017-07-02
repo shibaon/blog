@@ -2,12 +2,15 @@
 
 namespace Kh\ContentBundle\Entity;
 
+use Kh\UserBundle\Entity\User;
+use Kh\UserBundle\Manager\UserManager;
 use Svi\Crud\Entity\RemovableInterface;
 use Svi\Entity;
 
 class Post extends Entity implements RemovableInterface
 {
 	private $id;
+	private $userId;
 	private $title;
 	private $text;
 	private $published = true;
@@ -202,7 +205,44 @@ class Post extends Entity implements RemovableInterface
 
 	function __toString()
 	{
-		return $this->getTitle();
+		return $this->getTitle() . '';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUserId()
+	{
+		return $this->userId;
+	}
+
+	/**
+	 * @param mixed $userId
+	 * @return $this
+	 */
+	public function setUserId($userId)
+	{
+		$this->userId = $userId;
+
+		return $this;
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getAuthor()
+	{
+		return UserManager::getInstance()->findOneById($this->getUserId());
+	}
+
+	public function getEmail()
+	{
+		return $this->getAuthor()->getEmail();
+	}
+
+	public function getUrl()
+	{
+		return $this->getAuthor()->getUrl();
 	}
 
 }

@@ -4,7 +4,9 @@ namespace Kh\CommentsBundle\Service;
 
 use Kh\BaseBundle\ContainerAware;
 use Kh\CommentsBundle\Entity\Comment;
+use Kh\CommentsBundle\Manager\CommentManager;
 use Kh\ContentBundle\Entity\Post;
+use Kh\ContentBundle\Manager\PostManager;
 use Svi\Base\Forms\Form;
 
 class CommentsService extends ContainerAware
@@ -29,8 +31,8 @@ class CommentsService extends ContainerAware
 				->setText($data['text'])
 				->setPostId($post->getId())
 				->resetTimestamp()
-				->setIp($request->getClientIp())
-				->save();
+				->setIp($request->getClientIp());
+			$this->getManager()->save($comment);
 			$this->updatePostCommentsCount($post);
 
 			if (@$data['author']) {
@@ -58,7 +60,8 @@ class CommentsService extends ContainerAware
 	public function getPostCommentsForTemplate(Post $post)
 	{
 		$result = array();
-		foreach (Comment::findBy(['postId' => $post->getId()], ['timestamp' => 'asc']) as $c) {
+		/** @var Comment $c */
+		foreach ($this->getManager()->findBy(['postId' => $post->getId()], ['timestamp' => 'asc']) as $c) {
 			$result[] = $this->getCommentForTemplate($c);
 		}
 
@@ -106,17 +109,25 @@ class CommentsService extends ContainerAware
 	 */
 	public function getComment($id)
 	{
-		return Comment::findOneById($id);
+		return $this->getManager()->findOneById($id);
 	}
 
 	public function updatePostCommentsCount(Post $post)
 	{
-		$post->setCommentsCount($this->getCommentsCount($post))->save();
+		PostManager::getInstance()->save($post->setCommentsCount($this->getCommentsCount($post)));
 	}
 
 	public function getCommentsCount(Post $post)
 	{
-		return Comment::$connection->executeQuery('SELECT COUNT(*) FROM comment WHERE post_id = :post', ['post' => $post->getId()])->fetchColumn(0);
+		return $this->getManager()->getConnection()->executeQuery('SELECT COUNT(*) FROM comment WHERE post_id = :post', ['post' => $post->getId()])->fetchColumn(0);
+	}
+
+	/**
+	 * @return CommentManager
+	 */
+	public function getManager()
+	{
+		return CommentManager::getInstance();
 	}
 
 }

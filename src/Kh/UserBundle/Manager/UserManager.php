@@ -2,12 +2,18 @@
 
 namespace Kh\UserBundle\Manager;
 
+use Kh\UserBundle\Entity\User;
 use Svi\Manager;
 
+/**
+ * Class UserManager
+ * @method static UserManager getInstance
+ * @package Kh\UserBundle\Manager
+ */
 class UserManager extends Manager
 {
 
-	protected function getFields()
+	public function getDbFieldsDefinition()
 	{
 		return [
 			'id'                => ['id', 'integer', 'id'],
@@ -25,14 +31,14 @@ class UserManager extends Manager
 		];
 	}
 
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'user';
 	}
 
-	protected function getEntityClassName()
+	public function getEntityClassName()
 	{
-		return 'Kh\UserBundle\Entity\User';
+		return User::class;
 	}
 
 }

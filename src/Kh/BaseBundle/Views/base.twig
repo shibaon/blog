@@ -39,12 +39,12 @@
 			<li><a href="{{ path('_comments') }}"><b class="glyphicon glyphicon-comment"></b>Комменты</a></li>
 
 			{% if menu %}
-				{% for route, item in menu %}
-					<li {% if item.noLink %}class="dropdown"{% endif %}><a {% if not item.noLink %}href="{{ path(route) }}"{% else %}href="#" class="dropdown-toggle" data-toggle="dropdown"{% endif %}>{{ item.title }}{% if item.noLink %} <b class="caret"></b>{% endif %}</a>
+				{% for item in menu %}
+					<li {% if item.noLink %}class="dropdown"{% endif %}><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ item.title }}{% if item.noLink %} <b class="caret"></b>{% endif %}</a>
 						{% if item.items %}
 							<ul class="dropdown-menu">
 								{% for route, item in item.items %}
-									<li><a href="{% if not item.directLink %}{{ path(route) }}{% else %}{{ route }}{% endif %}">{{ item.title }}</a></li>
+									<li><a href="{{ item.link }}">{{ item.title }}</a></li>
 								{% endfor %}
 							</ul>
 						{% endif %}

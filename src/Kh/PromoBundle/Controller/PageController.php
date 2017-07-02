@@ -14,9 +14,9 @@ class PageController extends Controller
 			return $this->redirect('_post', ['id' => $post->getId()]);
 		}
 		if (!$page) {
-			$page = $this->c->getPageManager()->getPageByUrl(null);
+			$page = $this->c->getPageService()->getPageByUrl(null);
 		} else {
-			$page = $this->c->getPageManager()->getPageByUrl($page);
+			$page = $this->c->getPageService()->getPageByUrl($page);
 		}
 		if (!$page) {
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();

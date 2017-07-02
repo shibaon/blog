@@ -12,27 +12,6 @@ class Subscription extends Entity
 	private $hash;
 
 	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'     => ['id', 'integer', 'id'],
-			'email'  => ['email', 'string', 'length' => 64],
-			'postId' => ['post_id', 'integer', 'index'],
-			'hash'   => ['hash', 'string', 'length' => 32],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'comments_subscription';
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getId()

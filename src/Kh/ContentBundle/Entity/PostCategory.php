@@ -2,6 +2,8 @@
 
 namespace Kh\ContentBundle\Entity;
 
+use Kh\ContentBundle\Manager\CategoryManager;
+use Kh\ContentBundle\Manager\PostManager;
 use Svi\Entity;
 
 class PostCategory extends Entity
@@ -42,7 +44,7 @@ class PostCategory extends Entity
 	 */
 	public function getPost()
 	{
-		return Post::findOneById($this->getPostId());
+		return PostManager::getInstance()->findOneById($this->getPostId());
 	}
 
 	/**
@@ -69,7 +71,7 @@ class PostCategory extends Entity
 	 */
 	public function getCategory()
 	{
-		return Category::findOneById($this->getCategoryId());
+		return CategoryManager::getInstance()->findOneById($this->getCategoryId());
 	}
 
 	/**

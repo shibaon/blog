@@ -22,17 +22,17 @@ class CategoryService extends ContainerAware
 				continue;
 			}
 			$executed[$category->getId()] = true;
-			$link = PostCategory::findOneBy(['postId' => $post->getId(), 'categoryId' => $category->getId()]);
+			$link = PostCategoryManager::getInstance()->findOneBy(['postId' => $post->getId(), 'categoryId' => $category->getId()]);
 			if (!$link) {
 				$link = new PostCategory();
 				$link
 					->setPostId($post->getId())
-					->setCategoryId($category->getId())
-					->save();
+					->setCategoryId($category->getId());
+				PostCategoryManager::getInstance()->save($link);
 			}
 		}
 
-		PostCategory::$connection->executeQuery('DELETE FROM post_category WHERE post_id = ' . $post->getId() . ' ' .
+		$this->getManager()->getConnection()->executeQuery('DELETE FROM post_category WHERE post_id = ' . $post->getId() . ' ' .
 			(count($executed) ?
 				'AND category_id NOT IN (' . implode(',', array_keys($executed)) . ')' : ''
 			)
@@ -49,8 +49,8 @@ class CategoryService extends ContainerAware
 		if ($moveTo && $category->getId() != $moveTo->getId()) {
 			$this->movePosts($category, $moveTo);
 		}
-		PostCategory::$connection->executeQuery('DELETE FROM post_category WHERE category_id = ' . $category->getId());
-		$category->delete();
+		$this->getManager()->getConnection()->executeQuery('DELETE FROM post_category WHERE category_id = ' . $category->getId());
+		$this->getManager()->delete($category);
 		if ($moveTo) {
 			$this->updateCategoryPostsCount($moveTo);
 		}
@@ -58,7 +58,7 @@ class CategoryService extends ContainerAware
 
 	public function movePosts(Category $from, Category $to)
 	{
-		PostCategory::$connection->executeQuery('UPDATE post_category SET category_id = ' . $to->getId() . ' WHERE category_id = ' . $from->getId());
+		$this->getManager()->getConnection()->executeQuery('UPDATE post_category SET category_id = ' . $to->getId() . ' WHERE category_id = ' . $from->getId());
 	}
 
 	/**
@@ -67,12 +67,12 @@ class CategoryService extends ContainerAware
 	 */
 	public function getCategory($id)
 	{
-		return CategoryManager::getInstance()->findOneById($id);
+		return $this->getManager()->findOneById($id);
 	}
 
 	public function getCategories()
 	{
-		return CategoryManager::getInstance()->findBy([], ['name' => 'asc']);
+		return $this->getManager()->findBy([], ['name' => 'asc']);
 	}
 
 	public function getCategoriesForSelect()
@@ -95,6 +95,14 @@ class CategoryService extends ContainerAware
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @return CategoryManager
+	 */
+	protected function getManager()
+	{
+		return CategoryManager::getInstance();
 	}
 
 }

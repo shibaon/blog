@@ -4,6 +4,7 @@ namespace Kh\CommentsBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
 use Kh\CommentsBundle\Entity\Comment;
+use Kh\CommentsBundle\Manager\CommentManager;
 use Svi\Base\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,7 +13,7 @@ class CommentsController extends Controller
 
 	public function indexAction(Request $request)
 	{
-		$db = Comment::$connection->createQueryBuilder()->select('COUNT(*)')->from('comment', '');
+		$db = CommentManager::getInstance()->getConnection()->createQueryBuilder()->select('COUNT(*)')->from('comment', '');
 		$paginator = new Paginator($db->execute()->fetchColumn(0), 30, $request, 14);
 		$db
 			->select('')
@@ -22,7 +23,7 @@ class CommentsController extends Controller
 
 		$comments = [];
 		/** @var Comment $c */
-		foreach (Comment::fetch($db) as $c) {
+		foreach (CommentManager::getInstance()->fetch($db) as $c) {
 			$comments[] = $this->c->getCommentsService()->getCommentForTemplate($c);
 		}
 
@@ -43,7 +44,7 @@ class CommentsController extends Controller
 			return $this->jsonError();
 		}
 
-		$comment->delete();
+		CommentManager::getInstance()->delete($comment);
 		$this->c->getCommentsService()->updatePostCommentsCount($comment->getPost());
 
 		return $this->jsonSuccess();

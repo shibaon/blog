@@ -7,17 +7,24 @@ use \Doctrine\DBAL\Schema\Table;
 use \Doctrine\DBAL\Schema\Column;
 use \Doctrine\DBAL\Connection;
 use \Doctrine\DBAL\Query\QueryBuilder;
+use Kh\ContentBundle\Entity\Post;
+use Svi\Crud\Entity\NestedSortableInterface;
+use Svi\Crud\Entity\RemovableInterface;
+use Svi\Crud\Entity\SortableInterface;
 
 // Singleton
+
 abstract class Manager
 {
 	protected static $_instance = [];
 	/** @var Application */
 	protected static $app;
 	private $schemaName = null;
-	/** @var null Schema */
-	private $schema = null;
+	/** @var Schema[] Schema */
+	private static $schemas = [];
 	private $cache = [];
+	/** @var \ReflectionClass */
+	private $reflection = null;
 
 	private function __construct()
 	{
@@ -36,12 +43,12 @@ abstract class Manager
 
 	public static function setApp(Application $app)
 	{
-		static::$app = $app;
+		self::$app = $app;
 	}
 
-	protected function setSchemaName($schemaName)
+	public function getSchemaName()
 	{
-		$this->schemaName = $schemaName;
+		return $this->schemaName;
 	}
 
 	/**
@@ -50,16 +57,16 @@ abstract class Manager
 	 */
 	public static function getInstance($schemaName = 'default')
 	{
-		if (!array_key_exists($schemaName, static::$_instance) || !array_key_exists(get_called_class(), static::$_instance[$schemaName])) {
+		if (!array_key_exists($schemaName, self::$_instance) || !array_key_exists(get_called_class(), self::$_instance[$schemaName])) {
 			$instance = new static();
-			if (!array_key_exists($schemaName, static::$_instance)) {
-				static::$_instance[$schemaName] = [];
+			if (!array_key_exists($schemaName, self::$_instance)) {
+				self::$_instance[$schemaName] = [];
 			}
-			static::$_instance[$schemaName][get_called_class()] = $instance;
+			self::$_instance[$schemaName][get_called_class()] = $instance;
 			$instance->schemaName = $schemaName;
 		}
 
-		return static::$_instance[$schemaName][get_called_class()];
+		return self::$_instance[$schemaName][get_called_class()];
 	}
 
 	/**
@@ -67,27 +74,27 @@ abstract class Manager
 	 */
 	public function getConnection()
 	{
-		return static::$app->getSilex()['dbs'][$this->schemaName];
+		return self::$app->getSilex()['dbs'][$this->schemaName];
 	}
 
 	/**
 	 * Must return fields in like that: classFieldName => Column schema
 	 */
-	abstract protected function getFields();
+	abstract public function getDbFieldsDefinition();
 
 	/**
 	 * Must return table name in SQL DB where entity stored
 	 */
-	abstract protected function getTableName();
+	abstract public function getTableName();
 
-	abstract protected function getEntityClassName();
+	abstract public function getEntityClassName();
 
 	/**
 	 * @return \Doctrine\DBAL\Schema\Schema
 	 */
 	public function getDbSchema()
 	{
-		return $this->schema;
+		return self::$schemas[$this->getSchemaName()];
 	}
 
 	/**
@@ -96,18 +103,18 @@ abstract class Manager
 	 */
 	final public function getTableSchema()
 	{
-		if ($this->schema === null) {
-			$this->schema = new Schema();
+		if (!array_key_exists($this->getSchemaName(), self::$schemas)) {
+			self::$schemas[$this->getSchemaName()] = new Schema();
 		}
-		if (!$this->schema->hasTable($this->getTableName())) {
+		if (!self::$schemas[$this->getSchemaName()]->hasTable($this->getTableName())) {
 			/** @var \Doctrine\DBAL\Schema\Table $table */
-			$table = $this->schema->createTable($this->getTableName());
+			$table = self::$schemas[$this->getSchemaName()]->createTable($this->getTableName());
 			$this->cache['table'] = $table;
 
 			$dbColumnsToFieldNames = [];
 			$fieldToColumnNames = [];
 			$columns = array();
-			foreach ($this->getFields() as $key => $value) {
+			foreach ($this->getDbFieldsDefinition() as $key => $value) {
 				$column = $table->addColumn($value[0], $value[1]);
 				if (count($value) > 2) {
 					$i = 0;
@@ -228,26 +235,28 @@ abstract class Manager
 
 	/**
 	 * Returns field value by class private field name
+	 * @param Entity $entity
 	 * @param $fieldName
 	 * @return mixed
 	 */
-	final public function getFieldValue($fieldName)
+	final public function getFieldValue(Entity $entity, $fieldName)
 	{
 		$method = 'get' . ucfirst($fieldName);
 
-		return $this->$method();
+		return $entity->$method();
 	}
 
 	/**
+	 * @param Entity $entity
 	 * @param $fieldName
 	 * @param $value
 	 * @return mixed
 	 */
-	final public function setFieldValue($fieldName, $value)
+	final public function setFieldValue(Entity $entity, $fieldName, $value)
 	{
 		$method = 'set' . ucfirst($fieldName);
 
-		return $this->$method($value);
+		return $entity->$method($value);
 	}
 
 	/**
@@ -340,7 +349,7 @@ abstract class Manager
 		$result = array();
 
 		foreach ($this->getColumnsSchemas() as $fieldName => $schema) {
-			$value = $this->getFieldValue($fieldName);
+			$value = $this->getFieldValue($entity, $fieldName);
 			if ($schema->getType() == 'Array') {
 				if (!is_array($value) || !$value) {
 					$value = serialize([]);
@@ -380,12 +389,11 @@ abstract class Manager
 	 *
 	 * @param array $data
 	 * @param Entity|null $entity
-	 * @return $this
+	 * @return Entity
 	 */
 	final public function fillByData(array $data, Entity $entity = null)
 	{
-		$entityName = $this->getEntityClassName();
-		$entity = $entity ? $entity : new $entityName;
+		$entity = $entity ? $entity : $this->createEntity();
 		$entity->setLoadedData($data);
 		foreach ($data as $key => $value) {
 			if ($key == $this->getIdColumnName()) {
@@ -394,7 +402,7 @@ abstract class Manager
 			$this->setFieldValueByDbKey($entity, $key, $value);
 		}
 
-		return $this;
+		return $entity;
 	}
 
 	public function save(Entity $entity)
@@ -403,26 +411,26 @@ abstract class Manager
 		if ($entity->getLoadedFromDb()) {
 			$data = $this->getDataArray($entity,true, true);
 			if (count($data)) {
-				$connection->update($this->getTableName(), $data, [$this->getIdColumnName() => $this->getFieldValue($this->getIdFieldName())]);
+				$connection->update($this->getTableName(), $data, [$this->getIdColumnName() => $this->getFieldValue($entity, $this->getIdFieldName())]);
 			}
 		} else {
 			$data = $this->getDataArray($entity, false, true);
 			if (count($data)) {
 				$connection->insert($this->getTableName(), $data);
 			}
-			$this->setFieldValue($this->getIdFieldName(), $connection->lastInsertId());
+			$this->setFieldValue($entity, $this->getIdFieldName(), $connection->lastInsertId());
 		}
 		$this->cache['fetch'] = [];
 		$entity->setLoadedFromDb(true);
 
-		return $this;
+		return $entity;
 	}
 
 	public function delete(Entity $entity)
 	{
 		$connection = $this->getConnection();
 		if ($entity->getLoadedFromDb()) {
-			$connection->delete($this->getTableName(), array($this->getIdColumnName() => $this->getFieldValue($this->getIdFieldName())));
+			$connection->delete($this->getTableName(), array($this->getIdColumnName() => $this->getFieldValue($entity, $this->getIdFieldName())));
 			$this->cache['fetch'] = [];
 		}
 	}
@@ -430,7 +438,7 @@ abstract class Manager
 	/**
 	 * @param QueryBuilder $qb
 	 * @param null $noCache
-	 * @return $this|null
+	 * @return Entity|null
 	 */
 	public function fetchOne(QueryBuilder $qb, $noCache = null)
 	{
@@ -439,10 +447,13 @@ abstract class Manager
 		return array_key_exists(0, $result) ? $result[0] : null;
 	}
 
+	/**
+	 * @param QueryBuilder $qb
+	 * @param null $noCache
+	 * @return Entity[]
+	 */
 	public function fetch(QueryBuilder $qb, $noCache = null)
 	{
-		$entityName = $this->getEntityClassName();
-		$entity = new $entityName;
 		$qb->resetQueryPart('from');
 		$columnNames = [];
 		foreach ($this->getDbColumnNames() as $n) {
@@ -467,16 +478,8 @@ abstract class Manager
 		$items = $qb->execute()->fetchAll();
 		if (count($items)) {
 			foreach ($items as $e) {
-				if (isset($entity)) {
-					$this->fillByData($e, $entity);
-					$result[] = $entity;
-					unset($entity);
-				} else {
-					$result[] = new static($e);
-				}
+				$result[] = $this->fillByData($e);
 			}
-		} else {
-			unset($entity);
 		}
 		if ($cacheKey) {
 			if (!array_key_exists('fetch', $this->cache)) {
@@ -488,15 +491,21 @@ abstract class Manager
 		return $result;
 	}
 
+	/**
+	 * @param array $criteria
+	 * @param array|null $orderBy
+	 * @param null $limit
+	 * @param null $offset
+	 * @param null $noCache
+	 * @return Entity[]
+	 * @throws \Exception
+	 */
 	public function findBy(array $criteria = [], array $orderBy = null, $limit = null, $offset = null, $noCache = null)
 	{
 		$connection = $this->getConnection();
 
 		$db = $connection->createQueryBuilder();
-		$entityName = $this->getEntityClassName();
-		$entity = new $entityName();
 		$columns = $this->getColumnsSchemas();
-		unset($entity);
 		if (count($criteria)) {
 			foreach ($criteria as $col => $val) {
 				if (!isset($columns[$col])) {
@@ -528,14 +537,20 @@ abstract class Manager
 			$db->setFirstResult($offset);
 		}
 
-		return self::fetch($db, $noCache);
+		return $this->fetch($db, $noCache);
 	}
 
+	/**
+	 * @param array $criteria
+	 * @param array|null $orderBy
+	 * @param null $noCache
+	 * @return Entity|null
+	 */
 	public function findOneBy(array $criteria = [], array $orderBy = null, $noCache = null)
 	{
 		$result = self::findBy($criteria, $orderBy, 1, null, $noCache);
 
-		return @$result[0];
+		return count($result) ? $result[0] : null;
 	}
 
 	public function __call($name, $arguments) {
@@ -553,6 +568,44 @@ abstract class Manager
 		}
 
 		throw new \ErrorException ('Call to Undefined Method ' . get_called_class() . '::' . $name . '()', 0, E_ERROR);
+	}
+
+	/**
+	 * @return \ReflectionClass
+	 */
+	public function getReflection()
+	{
+		if ($this->reflection === null) {
+			$this->reflection = new \ReflectionClass($this->getEntityClassName());
+		}
+
+		return $this->reflection;
+	}
+
+	public function isSortable()
+	{
+		return $this->getReflection()->implementsInterface(SortableInterface::class) ||
+			$this->getReflection()->implementsInterface(NestedSortableInterface::class);
+	}
+
+	public function isNestedSortable()
+	{
+		return $this->getReflection()->implementsInterface(NestedSortableInterface::class);
+	}
+
+	public function isRemovable()
+	{
+		return $this->getReflection()->implementsInterface(RemovableInterface::class);
+	}
+
+	/**
+	 * @return Entity
+	 */
+	public function createEntity()
+	{
+		$className = $this->getEntityClassName();
+
+		return new $className();
 	}
 
 }

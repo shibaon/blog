@@ -37,7 +37,7 @@ class PostService extends ContainerAware
 
 		$result = [];
 		foreach ($db->execute()->fetchAll() as $p) {
-			$result[] = $this->getPostForTemplate((new Post())->fillByData($p), true);
+			$result[] = $this->getPostForTemplate($this->getManager()->fillByData($p), true);
 		}
 		return $result;
 	}
@@ -88,6 +88,11 @@ class PostService extends ContainerAware
 		}
 
 		return $db;
+	}
+
+	protected function getManager()
+	{
+		return PostManager::getInstance();
 	}
 
 }

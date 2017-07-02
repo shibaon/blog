@@ -12,28 +12,6 @@ class Page extends Entity
 	private $uri;
 	private $published;
 
-	/**
-	 * Must return fields in like that: DB_field_name => classFieldName
-	 */
-	public function getFields()
-	{
-		return [
-			'id'        => ['id', 'integer', 'id'],
-			'title'     => ['title', 'string', 'length' => 128],
-			'text'      => ['text', 'text', 'null'],
-			'uri'       => ['uri', 'string', 'length' => 64, 'null'],
-			'published' => ['published', 'boolean'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'page';
-	}
-
 	public function getId()
 	{
 		return $this->id;

@@ -10,12 +10,12 @@ class UserService extends \Svi\Base\Service\UserService
 
 	public function getEditors()
 	{
-		return User::findBy(['role' => 'EDITOR']);
+		return $this->getManager()->findBy(['role' => 'EDITOR']);
 	}
 
 	public function getAdmins()
 	{
-		return User::findBy(['role' => 'ADMIN']);
+		return $this->getManager()->findBy(['role' => 'ADMIN']);
 	}
 
 	/**
@@ -24,7 +24,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserById($id)
 	{
-		return UserManager::getInstance()->findOneById($id);
+		return $this->getManager()->findOneById($id);
 	}
 
 	/**
@@ -33,7 +33,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByRestoreHash($hash)
 	{
-		return User::findOneByRestoreHash(strtolower($hash));
+		return $this->getManager()->findOneByRestoreHash(strtolower($hash));
 	}
 
 	/**
@@ -42,7 +42,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByConfirmationHash($hash)
 	{
-		return User::findOneByConfirmationHash(strtolower($hash));
+		return $this->getManager()->findOneByConfirmationHash(strtolower($hash));
 	}
 
 	/**
@@ -50,7 +50,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getCurrentAdmin()
 	{
-		$user = $this->getCurrentUser(true);
+		$user = $this->getCurrentUser();
 		if (!$user || !$user->isAdmin()) {
 			return null;
 		}
@@ -60,7 +60,7 @@ class UserService extends \Svi\Base\Service\UserService
 
 	public function getCurrentEditor()
 	{
-		$user = $this->getCurrentUser(true);
+		$user = $this->getCurrentUser();
 		if (!$user || !$user->isEditor()) {
 			return null;
 		}
@@ -79,7 +79,7 @@ class UserService extends \Svi\Base\Service\UserService
 	public function login(User $user)
 	{
 		$this->loginUser($user->getId(), true);
-		$user->save();
+		$this->getManager()->save($user);
 	}
 
 	public function hashPassword($password)
@@ -98,7 +98,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByEmail($email)
 	{
-		return User::findOneByEmail(strtolower($email));
+		return $this->getManager()->findOneByEmail(strtolower($email));
 	}
 
 	/**
@@ -107,7 +107,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByTwitterId($id)
 	{
-		return User::findOneByTwitterId($id);
+		return $this->getManager()->findOneByTwitterId($id);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByVkId($id)
 	{
-		return User::findOneByVkId($id);
+		return $this->getManager()->findOneByVkId($id);
 	}
 
 	/**
@@ -125,7 +125,12 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	public function getUserByFbId($id)
 	{
-		return User::findOneByFbId($id);
+		return $this->getManager()->findOneByFbId($id);
 	}
 
-} 
+	protected function getManager()
+	{
+		return UserManager::getInstance();
+	}
+
+}

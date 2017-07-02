@@ -200,11 +200,12 @@ class Application
 	}
 
 	/**
+	 * @param string $schemaName
 	 * @return \Doctrine\DBAL\Connection
 	 */
-	public function getDb()
+	public function getDb($schemaName = 'default')
 	{
-		return $this->silex['db'];
+		return $this->silex['dbs'][$schemaName];
 	}
 
 	/**

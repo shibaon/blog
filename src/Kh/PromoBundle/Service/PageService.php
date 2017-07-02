@@ -4,6 +4,7 @@ namespace Kh\PromoBundle\Service;
 
 use Kh\BaseBundle\ContainerAware;
 use Kh\PromoBundle\Entity\Page;
+use Kh\PromoBundle\Manager\PageManager;
 
 class PageService extends ContainerAware
 {
@@ -14,7 +15,15 @@ class PageService extends ContainerAware
 	 */
 	public function getPageByUrl($url)
 	{
-		return Page::findOneByUri($url);
+		return $this->getManager()->findOneByUri($url);
+	}
+
+	/**
+	 * @return PageManager
+	 */
+	protected function getManager()
+	{
+		return PageManager::getInstance();
 	}
 
 } 

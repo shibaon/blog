@@ -5,6 +5,7 @@ namespace Kh\ContentBundle\Controller;
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
 use Kh\ContentBundle\Entity\Post;
+use Kh\ContentBundle\Manager\PostManager;
 use Svi\Base\Forms\Form;
 use Svi\Entity;
 
@@ -39,7 +40,7 @@ class AdminPostController extends CrudController
 	 * @param Form $form
 	 * @param Post $entity
 	 */
-	protected function buildForm(Form $form, $entity)
+	protected function buildForm(Form $form, Entity $entity)
 	{
 		$postCategories = [];
 		/** @var Category $c */
@@ -84,6 +85,7 @@ class AdminPostController extends CrudController
 		$categoriesString = $form->get('categories')->getData();
 
 		$form->remove('categories');
+		$entity->setUserId($this->c->getUserService()->getCurrentUser()->getId());
 		parent::save($entity, $form, $exclude);
 
 		$this->c->getCategoryService()->setPostCategories($entity, explode(',', $categoriesString));
@@ -117,9 +119,9 @@ class AdminPostController extends CrudController
 		];
 	}
 
-	protected function getClassName()
+	protected function getManager()
 	{
-		return 'Kh\\ContentBundle\\Entity\\Post';
+		return PostManager::getInstance();
 	}
 
 }

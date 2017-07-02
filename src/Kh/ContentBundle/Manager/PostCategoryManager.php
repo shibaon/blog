@@ -2,6 +2,7 @@
 
 namespace Kh\ContentBundle\Manager;
 
+use Kh\ContentBundle\Entity\PostCategory;
 use Svi\Manager;
 
 class PostCategoryManager extends Manager
@@ -10,7 +11,7 @@ class PostCategoryManager extends Manager
 	/**
 	 * Must return fields in like that: classFieldName => Column schema
 	 */
-	protected function getFields()
+	public function getDbFieldsDefinition()
 	{
 		return [
 			'id'         => ['id', 'integer', 'id'],
@@ -22,14 +23,14 @@ class PostCategoryManager extends Manager
 	/**
 	 * Must return table name in SQL DB where entity stored
 	 */
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'post_category';
 	}
 
-	protected function getEntityClassName()
+	public function getEntityClassName()
 	{
-		return 'Kh\ContentBundle\Entity\PostCategory';
+		return PostCategory::class;
 	}
 
 }

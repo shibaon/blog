@@ -3,7 +3,9 @@
 namespace Kh\CommentsBundle\Entity;
 
 use Kh\ContentBundle\Entity\Post;
+use Kh\ContentBundle\Manager\PostManager;
 use Kh\UserBundle\Entity\User;
+use Kh\UserBundle\Manager\UserManager;
 use Svi\Entity;
 
 class Comment extends Entity
@@ -17,32 +19,6 @@ class Comment extends Entity
 	private $ip;
 	private $text;
 	private $postId;
-
-	/**
-	 * Must return fields in like that: classFieldName => Column schema
-	 */
-	protected function getFields()
-	{
-		return [
-			'id'        => ['id', 'integer', 'id'],
-			'userId'    => ['user_id', 'integer', 'index', 'null'],
-			'author'    => ['author', 'string', 'length' => 32, 'null'],
-			'email'     => ['email', 'string', 'length' => 64, 'null'],
-			'url'       => ['url', 'string', 'length' => 64, 'null'],
-			'timestamp' => ['timestamp', 'integer', 'index'],
-			'ip'        => ['ip', 'string', 'length' => 14],
-			'text'      => ['text', 'text', 'null'],
-			'postId'    => ['post_id', 'integer', 'index'],
-		];
-	}
-
-	/**
-	 * Must return table name in SQL DB where entity stored
-	 */
-	public function getTableName()
-	{
-		return 'comment';
-	}
 
 	/**
 	 * @return mixed
@@ -76,7 +52,7 @@ class Comment extends Entity
 	 */
 	public function getUser()
 	{
-		return User::findOneById($this->getUserId());
+		return UserManager::getInstance()->findOneById($this->getUserId());
 	}
 
 	/**
@@ -222,7 +198,7 @@ class Comment extends Entity
 	 */
 	public function getPost()
 	{
-		return Post::findOneById($this->getPostId());
+		return PostManager::getInstance()->findOneById($this->getPostId());
 	}
 
 	/**

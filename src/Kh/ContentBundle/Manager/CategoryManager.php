@@ -2,12 +2,18 @@
 
 namespace Kh\ContentBundle\Manager;
 
+use Kh\ContentBundle\Entity\Category;
 use Svi\Manager;
 
+/**
+ * Class CategoryManager
+ * @method static CategoryManager getInstance()
+ * @package Kh\ContentBundle\Manager
+ */
 class CategoryManager extends Manager
 {
 
-	protected function getFields()
+	public function getDbFieldsDefinition()
 	{
 		return [
 			'id'         => ['id', 'integer', 'id'],
@@ -16,14 +22,14 @@ class CategoryManager extends Manager
 		];
 	}
 
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'category';
 	}
 
-	protected function getEntityClassName()
+	public function getEntityClassName()
 	{
-		return 'Kh\ContentBundle\Entity\Category';
+		return Category::class;
 	}
 
 

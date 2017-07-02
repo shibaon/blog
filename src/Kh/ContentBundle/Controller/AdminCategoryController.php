@@ -4,7 +4,9 @@ namespace Kh\ContentBundle\Controller;
 
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
+use Kh\ContentBundle\Manager\CategoryManager;
 use Svi\Base\Forms\Form;
+use Svi\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -20,8 +22,10 @@ class AdminCategoryController extends CrudController
 		];
 	}
 
-	function deleteAction($id, Request $request)
+	function deleteAction($id)
 	{
+		$request = $this->getRequest();
+
 		if (!($category = $this->c->getCategoryManager()->getCategory($id))) {
 			throw new NotFoundHttpException;
 		}
@@ -60,7 +64,7 @@ class AdminCategoryController extends CrudController
 	 * @param Form $form
 	 * @param Category $entity
 	 */
-	protected function buildForm(Form $form, $entity)
+	protected function buildForm(Form $form, Entity $entity)
 	{
 		$form
 			->add('name', 'text', [
@@ -79,9 +83,12 @@ class AdminCategoryController extends CrudController
 		];
 	}
 
-	protected function getClassName()
+	/**
+	 * @return CategoryManager
+	 */
+	protected function getManager()
 	{
-		return 'Kh\\ContentBundle\\Entity\\Category';
+		return CategoryManager::getInstance();
 	}
 
 }

@@ -4,12 +4,18 @@ namespace Kh\PromoBundle\Controller;
 
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\PromoBundle\Entity\Page;
-use Sv\BaseBundle\Forms\Form;
+use Kh\PromoBundle\Manager\PageManager;
+use Svi\Base\Forms\Form;
+use Svi\Entity;
 
 class AdminPageController extends CrudController
 {
 
-	protected function buildForm(Form $builder, $entity)
+	/**
+	 * @param Form $builder
+	 * @param Page $entity
+	 */
+	protected function buildForm(Form $builder, Entity $entity)
 	{
 		if ($entity instanceof Page) {
 			$builder
@@ -58,9 +64,9 @@ class AdminPageController extends CrudController
 		);
 	}
 
-	protected function getClassName()
+	protected function getManager()
 	{
-		return 'Kh\\PromoBundle\\Entity\\Page';
+		return PageManager::getInstance();
 	}
 
 } 

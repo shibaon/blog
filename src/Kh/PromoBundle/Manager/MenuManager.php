@@ -2,15 +2,21 @@
 
 namespace Kh\PromoBundle\Manager;
 
+use Kh\PromoBundle\Entity\Menu;
 use Svi\Manager;
 
+/**
+ * Class MenuManager
+ * @method static MenuManager getInstance()
+ * @package Kh\PromoBundle\Manager
+ */
 class MenuManager extends Manager
 {
 
 	/**
 	 * Must return fields in like that: DB_field_name => classFieldName
 	 */
-	protected function getFields()
+	public function getDbFieldsDefinition()
 	{
 		return [
 			'id'       => ['id', 'integer', 'id'],
@@ -24,14 +30,14 @@ class MenuManager extends Manager
 	/**
 	 * Must return table name in SQL DB where entity stored
 	 */
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'menu';
 	}
 
-	protected function getEntityClassName()
+	public function getEntityClassName()
 	{
-		return '\Kh\PromoBundle\Entity\Menu';
+		return Menu::class;
 	}
 
 }

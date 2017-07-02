@@ -5,6 +5,8 @@ namespace Kh\AdminBundle\Controller;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Svi\Base\Entity\Setting;
 use Svi\Base\Forms\Form;
+use Svi\Base\Manager\SettingManager;
+use Svi\Entity;
 
 class SettingsController extends CrudController
 {
@@ -16,7 +18,7 @@ class SettingsController extends CrudController
 		return parent::indexAction();
 	}
 
-	protected function buildForm(Form $form, $entity)
+	protected function buildForm(Form $form, Entity $entity)
 	{
 		$type = $this->c->getSettingsService()->getSettingType($entity->getKey());
 		if ($type == 'wysiwyg') {
@@ -57,9 +59,9 @@ class SettingsController extends CrudController
 		}
 	}
 
-	protected function getClassName()
+	protected function getManager()
 	{
-		return 'Svi\Base\Entity\Setting';
+		return SettingManager::getInstance();
 	}
 
 	protected function getListColumns()

@@ -4,6 +4,7 @@ namespace Kh\CommentsBundle\Service;
 
 use Kh\BaseBundle\ContainerAware;
 use Kh\CommentsBundle\Entity\Subscription;
+use Kh\CommentsBundle\Manager\SubscriptionManager;
 use Kh\ContentBundle\Entity\Post;
 
 class CommentsSubscriptionService extends ContainerAware
@@ -16,7 +17,7 @@ class CommentsSubscriptionService extends ContainerAware
 	 */
 	public function getSubscriptionByArgs(Post $post, $email)
 	{
-		return Subscription::findOneBy(['postId' => $post->getId(), 'email' => strtolower($email)]);
+		return $this->getManager()->findOneBy(['postId' => $post->getId(), 'email' => strtolower($email)]);
 	}
 
 	public function subscribe(Post $post, $email)
@@ -27,8 +28,9 @@ class CommentsSubscriptionService extends ContainerAware
 			$subscription
 				->setEmail(strtolower($email))
 				->setPostId($post->getId())
-				->setHash(md5($email . microtime(true)))
-				->save();
+				->setHash(md5($email . microtime(true)));
+
+			$this->getManager()->save($subscription);
 		}
 
 		return $subscription;
@@ -36,7 +38,7 @@ class CommentsSubscriptionService extends ContainerAware
 
 	public function getSubscribes(Post $post)
 	{
-		return Subscription::findByPostId($post->getId());
+		return $this->getManager()->findByPostId($post->getId());
 	}
 
 	/**
@@ -45,7 +47,7 @@ class CommentsSubscriptionService extends ContainerAware
 	 */
 	public function getSubscriptionByHash($hash)
 	{
-		return Subscription::findOneByHash($hash);
+		return $this->getManager()->findOneByHash($hash);
 	}
 
 	public function unsubscribe($hash)
@@ -54,6 +56,14 @@ class CommentsSubscriptionService extends ContainerAware
 		if ($subscription) {
 			$subscription->delete();
 		}
+	}
+
+	/**
+	 * @return SubscriptionManager
+	 */
+	protected function getManager()
+	{
+		return SubscriptionManager::getInstance();
 	}
 
 }

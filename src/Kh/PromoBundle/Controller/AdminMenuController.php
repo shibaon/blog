@@ -3,12 +3,19 @@
 namespace Kh\PromoBundle\Controller;
 
 use Kh\AdminBundle\Controller\CrudController;
-use Sv\BaseBundle\Forms\Form;
+use Kh\PromoBundle\Entity\Menu;
+use Kh\PromoBundle\Manager\MenuManager;
+use Svi\Base\Forms\Form;
+use Svi\Entity;
 
 class AdminMenuController extends CrudController
 {
 
-	protected function buildForm(Form $form, $entity)
+	/**
+	 * @param Form $form
+	 * @param Menu $entity
+	 */
+	protected function buildForm(Form $form, Entity $entity)
 	{
 		$form
 			->add('title', 'text', array(
@@ -43,9 +50,12 @@ class AdminMenuController extends CrudController
 		return true;
 	}
 
-	protected function getClassName()
+	/**
+	 * @return MenuManager
+	 */
+	protected function getManager()
 	{
-		return 'Kh\\PromoBundle\\Entity\\Menu';
+		return MenuManager::getInstance();
 	}
 
 } 

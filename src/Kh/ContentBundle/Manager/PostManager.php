@@ -2,15 +2,21 @@
 
 namespace Kh\ContentBundle\Manager;
 
+use Kh\ContentBundle\Entity\Post;
 use Svi\Manager;
 
+/**
+ * Class PostManager
+ * @package Kh\ContentBundle\Manager
+ */
 class PostManager extends Manager
 {
 
-	protected function getFields()
+	public function getDbFieldsDefinition()
 	{
 		return [
 			'id'            => ['id', 'integer', 'id'],
+			'userId'        => ['user_id', 'integer'],
 			'title'         => ['title', 'string', 'length' => 128],
 			'text'          => ['text', 'text', 'null'],
 			'published'     => ['published', 'boolean', 'index'],
@@ -21,14 +27,14 @@ class PostManager extends Manager
 		];
 	}
 
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'post';
 	}
 
-	protected function getEntityClassName()
+	public function getEntityClassName()
 	{
-		return 'Kh\ContentBundle\Entity\Post';
+		return Post::class;
 	}
 
 }
