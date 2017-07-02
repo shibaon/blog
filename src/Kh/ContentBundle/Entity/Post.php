@@ -69,8 +69,8 @@ class Post extends Entity implements RemovableInterface
 	{
 		$text = $this->getText();
 
-		if ($pos = mb_strpos($text, '<p>==more==</p>')) {
-			return substr($text, 0, $pos) . '<p><a class="readMoreLink" href="%readMoreLink%#readMore">%readMoreLinkText%</a></p>';
+		if ($pos = mb_strpos($text, '<p>==more==</p>', 0, 'utf-8')) {
+			return mb_substr($text, 0, $pos, 'utf-8') . '<p><a class="readMoreLink" href="%readMoreLink%#readMore">%readMoreLinkText%</a></p>';
 		}
 
 		return $text;
