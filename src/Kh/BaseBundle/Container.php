@@ -2,89 +2,47 @@
 
 namespace Kh\BaseBundle;
 
-use Kh\CommentsBundle\Service\CommentsService;
-use Kh\CommentsBundle\Service\CommentsSubscriptionService;
-use Kh\ContentBundle\Service\CategoryService;
-use Kh\ContentBundle\Service\PostService;
-use Kh\MailBundle\Service\MailService;
-use Kh\PromoBundle\Service\MenuService;
-use Kh\PromoBundle\Service\PageService;
-use Kh\UserBundle\Service\AuthorizationService;
-use Kh\UserBundle\Service\UserService;
-
 class Container extends \Svi\Base\Container
 {
 
 	/**
-	 * @return UserService
+	 * @return \Kh\UserBundle\Bundle
 	 */
-	public function getUserService()
+	public function getUserBundle()
 	{
-		return $this->getApp()->get('service.user');
+		return $this->getApp()->get('bundle.khuser');
 	}
 
 	/**
-	 * @return MailService
+	 * @return \Kh\PromoBundle\Bundle
 	 */
-	public function getMailService()
+	public function getPromoBundle()
 	{
-		return $this->getApp()->get('service.mail');
+		return $this->getApp()->get('bundle.khpromo');
 	}
 
 	/**
-	 * @return MenuService
+	 * @return \Kh\MailBundle\Bundle
 	 */
-	public function getMenuService()
+	public function getMailBundle()
 	{
-		return $this->getApp()->get('service.menu');
+		return $this->getApp()->get('bundle.khmail');
 	}
 
 	/**
-	 * @return PageService
+	 * @return \Kh\ContentBundle\Bundle
 	 */
-	public function getPageService()
+	public function getContentBundle()
 	{
-		return $this->getApp()->get('service.page');
+		return $this->getApp()->get('bundle.khcontent');
 	}
 
 	/**
-	 * @return AuthorizationService
+	 * @return \Kh\CommentsBundle\Bundle
 	 */
-	public function getAuthorizationService()
+	public function getCommentsBundle()
 	{
-		return $this->getApp()->get('service.authorization');
-	}
-
-	/**
-	 * @return PostService
-	 */
-	public function getPostService()
-	{
-		return $this->getApp()->get('service.post');
-	}
-
-	/**
-	 * @return CategoryService
-	 */
-	public function getCategoryService()
-	{
-		return $this->getApp()->get('service.category');
-	}
-
-	/**
-	 * @return CommentsService
-	 */
-	public function getCommentsService()
-	{
-		return $this->getApp()->get('service.comments');
-	}
-
-	/**
-	 * @return CommentsSubscriptionService
-	 */
-	public function getCommentsSubscriptionService()
-	{
-		return $this->getApp()->get('service.comments_subscription');
+		return $this->getApp()->get('bundle.khcomments');
 	}
 
 } 

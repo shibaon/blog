@@ -44,7 +44,7 @@ class AdminPostController extends CrudController
 	{
 		$postCategories = [];
 		/** @var Category $c */
-		foreach ($this->c->getCategoryService()->getPostCategories($entity) as $c) {
+		foreach ($this->c->getContentBundle()->getCategoryService()->getPostCategories($entity) as $c) {
 			$postCategories[] = $c->getId();
 		}
 
@@ -85,10 +85,10 @@ class AdminPostController extends CrudController
 		$categoriesString = $form->get('categories')->getData();
 
 		$form->remove('categories');
-		$entity->setUserId($this->c->getUserService()->getCurrentUser()->getId());
+		$entity->setUserId($this->c->getUserBundle()->getUserService()->getCurrentUser()->getId());
 		parent::save($entity, $form, $exclude);
 
-		$this->c->getCategoryService()->setPostCategories($entity, explode(',', $categoriesString));
+		$this->c->getContentBundle()->getCategoryService()->setPostCategories($entity, explode(',', $categoriesString));
 	}
 
 	protected function getEditTemplate()
@@ -101,7 +101,7 @@ class AdminPostController extends CrudController
 		$categories = [];
 
 		/** @var Category $c */
-		foreach ($this->c->getCategoryService()->getCategories() as $c) {
+		foreach ($this->c->getContentBundle()->getCategoryService()->getCategories() as $c) {
 			$categories[] = ['id' => $c->getId(), 'name' => $c->getName()];
 		}
 
@@ -121,7 +121,7 @@ class AdminPostController extends CrudController
 
 	protected function getManager()
 	{
-		return PostManager::getInstance();
+		return $this->c->getContentBundle()->getPostManager();
 	}
 
 }

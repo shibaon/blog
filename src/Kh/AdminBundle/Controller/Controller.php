@@ -52,10 +52,10 @@ abstract class Controller extends \Kh\BaseBundle\Controller\Controller
 
 	protected function getTemplateParameters(array $parameters = [])
 	{
-		$currentUser = $this->c->getUserService()->getCurrentEditor();
+		$currentUser = $this->c->getUserBundle()->getUserService()->getCurrentEditor();
 
 		return $parameters + [
-			'alerts' => $this->c->getAlertsService()->getAlerts(),
+			'alerts' => $this->c->getSviBaseBundle()->getAlertsService()->getAlerts(),
 			'currentUser' => $currentUser,
 			'adminMenu' => self::getMenu(),
 		];

@@ -90,8 +90,8 @@ class CategoryService extends ContainerAware
 	{
 		$result = [];
 		/** @var PostCategory $pc */
-		foreach (PostCategoryManager::getInstance()->findByPostId($post->getId()) as $pc) {
-			$result[] = $pc->getCategory();
+		foreach ($this->getPostCategoryManager()->findByPostId($post->getId()) as $pc) {
+			$result[] = $this->getManager()->findOneById($pc->getCategoryId());
 		}
 
 		return $result;
@@ -102,7 +102,15 @@ class CategoryService extends ContainerAware
 	 */
 	protected function getManager()
 	{
-		return CategoryManager::getInstance();
+		return $this->c->getContentBundle()->getCategoryManager();
+	}
+
+	/**
+	 * @return PostCategoryManager
+	 */
+	protected function getPostCategoryManager()
+	{
+		return $this->c->getContentBundle()->getPostCategoryManager();
 	}
 
 }

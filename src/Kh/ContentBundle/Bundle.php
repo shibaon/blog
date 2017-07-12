@@ -2,32 +2,38 @@
 
 namespace Kh\ContentBundle;
 
+use Kh\ContentBundle\Manager\CategoryManager;
+use Kh\ContentBundle\Manager\PostCategoryManager;
+use Kh\ContentBundle\Manager\PostManager;
+use Kh\ContentBundle\Service\CategoryService;
+use Kh\ContentBundle\Service\PostService;
+
 class Bundle extends \Svi\Bundle
 {
 
 	public function getRoutes()
 	{
 		return [
-			'AdminPost' => [
-				'_admin_post' => '/admin/post:index',
-				'_admin_post_add' => '/admin/post/add:add',
-				'_admin_post_edit' => '/admin/post/{id}/edit:edit',
+			'AdminPost'     => [
+				'_admin_post'        => '/admin/post:index',
+				'_admin_post_add'    => '/admin/post/add:add',
+				'_admin_post_edit'   => '/admin/post/{id}/edit:edit',
 				'_admin_post_delete' => '/admin/post/{id}/delete:delete',
 			],
 			'AdminCategory' => [
-				'_admin_category' => '/admin/category:index',
-				'_admin_category_add' => '/admin/category/add:add',
-				'_admin_category_edit' => '/admin/category/{id}/edit:edit',
+				'_admin_category'        => '/admin/category:index',
+				'_admin_category_add'    => '/admin/category/add:add',
+				'_admin_category_edit'   => '/admin/category/{id}/edit:edit',
 				'_admin_category_delete' => '/admin/category/{id}/delete:delete',
 			],
-			'Category' => [
+			'Category'      => [
 				'_category' => '/c/{id}:index',
 			],
-			'Rss' => [
+			'Rss'           => [
 				'_rss' => '/rss:index',
 				'/feed:feed',
 			],
-			'Post' => [
+			'Post'          => [
 				'_post' => '/p/{id}:index',
 			],
 		];
@@ -36,9 +42,58 @@ class Bundle extends \Svi\Bundle
 	protected function getServices()
 	{
 		return [
-			'service.post' => 'Service\PostService',
+			'service.post'     => 'Service\PostService',
 			'service.category' => 'Service\CategoryService',
 		];
+	}
+
+	protected function getManagers()
+	{
+		return [
+			'manager.category'      => 'Manager\CategoryManager',
+			'manager.post_category' => 'Manager\PostCategoryManager',
+			'manager.post'          => 'Manager\PostManager',
+		];
+	}
+
+	/**
+	 * @return PostService
+	 */
+	public function getPostService()
+	{
+		return $this->getApp()->get('service.post');
+	}
+
+	/**
+	 * @return CategoryService
+	 */
+	public function getCategoryService()
+	{
+		return $this->getApp()->get('service.category');
+	}
+
+	/**
+	 * @return CategoryManager
+	 */
+	public function getCategoryManager()
+	{
+		return $this->getApp()->get('manager.category');
+	}
+
+	/**
+	 * @return PostCategoryManager
+	 */
+	public function getPostCategoryManager()
+	{
+		return $this->getApp()->get('manager.post_category');
+	}
+
+	/**
+	 * @return PostManager
+	 */
+	public function getPostManager()
+	{
+		return $this->getApp()->get('manager.post');
 	}
 
 }

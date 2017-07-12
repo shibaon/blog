@@ -5,11 +5,6 @@ namespace Kh\ContentBundle\Manager;
 use Kh\ContentBundle\Entity\Category;
 use Svi\Manager;
 
-/**
- * Class CategoryManager
- * @method static CategoryManager getInstance()
- * @package Kh\ContentBundle\Manager
- */
 class CategoryManager extends Manager
 {
 

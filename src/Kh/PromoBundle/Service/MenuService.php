@@ -11,7 +11,7 @@ class MenuService extends ContainerAware
 
 	public function getMenuTree()
 	{
-		return $this->formatTree(MenuManager::getInstance()->findBy([], ['weight' => 'asc']));
+		return $this->formatTree($this->c->getPromoBundle()->getMenuManager()->findBy([], ['weight' => 'asc']));
 	}
 
 	protected function formatTree($menuItems)

@@ -26,6 +26,9 @@ class Bundle extends \Svi\Bundle
 	public function getRoutes()
 	{
 		return [
+			'FileUpload' => [
+				'/admin/56eb28693ab23b9d53bd0792ad47ca8c:image',
+			],
 			'Front' => [
 				'_admin' => '/admin:index',
 			],

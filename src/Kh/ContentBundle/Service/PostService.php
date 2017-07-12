@@ -17,7 +17,7 @@ class PostService extends ContainerAware
 	 */
 	public function getPostByAlias($alias)
 	{
-		return PostManager::getInstance()->findOneByAlias($alias);
+		return $this->c->getContentBundle()->getPostManager()->findOneByAlias($alias);
 	}
 
 	public function getPostsCount(Category $category = null, $search = null)
@@ -46,7 +46,7 @@ class PostService extends ContainerAware
 	{
 		$categories = array();
 		/** @var Category $c */
-		foreach ($this->c->getCategoryService()->getPostCategories($post) as $c) {
+		foreach ($this->c->getContentBundle()->getCategoryService()->getPostCategories($post) as $c) {
 			$categories[] = [
 				'id' => $c->getId(),
 				'name' => $c->getName(),
@@ -60,7 +60,7 @@ class PostService extends ContainerAware
 			'timestamp' => $post->getTimestamp(),
 			'date' => new DateFormatter($post->getTimestamp(), true),
 			'categories' => $categories,
-			'comments' => $this->c->getCommentsService()->getPostCommentsForTemplate($post),
+			'comments' => $this->c->getCommentsBundle()->getCommentsService()->getPostCommentsForTemplate($post),
 			'commentsCount' => $post->getCommentsCount(),
 		);
 	}
@@ -71,12 +71,12 @@ class PostService extends ContainerAware
 	 */
 	public function getPost($id)
 	{
-		return PostManager::getInstance()->findOneById($id);
+		return $this->getManager()->findOneById($id);
 	}
 
 	protected function getPostsQuery(Category $category = null, $search = null)
 	{
-		$db = PostManager::getInstance()->getConnection()->createQueryBuilder()->select('p.*')->from('post', 'p');
+		$db = $this->getManager()->getConnection()->createQueryBuilder()->select('p.*')->from('post', 'p');
 		$db->andWhere('p.published = 1 AND p.removed = 0');
 		if ($category) {
 			$db->andWhere('(SELECT COUNT(pc.id) FROM post_category pc WHERE pc.post_id = p.id AND pc.category_id = ' . $category->getId() . ') > 0');
@@ -90,9 +90,12 @@ class PostService extends ContainerAware
 		return $db;
 	}
 
+	/**
+	 * @return PostManager
+	 */
 	protected function getManager()
 	{
-		return PostManager::getInstance();
+		return $this->c->getContentBundle()->getPostManager();
 	}
 
 }

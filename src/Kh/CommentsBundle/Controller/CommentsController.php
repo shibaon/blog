@@ -13,7 +13,10 @@ class CommentsController extends Controller
 
 	public function indexAction(Request $request)
 	{
-		$db = CommentManager::getInstance()->getConnection()->createQueryBuilder()->select('COUNT(*)')->from('comment', '');
+		$manager = $this->c->getCommentsBundle()->getCommentManager();
+		$service = $this->c->getCommentsBundle()->getCommentsService();
+
+		$db = $manager->getConnection()->createQueryBuilder()->select('COUNT(*)')->from('comment', '');
 		$paginator = new Paginator($db->execute()->fetchColumn(0), 30, $request, 14);
 		$db
 			->select('')
@@ -23,8 +26,8 @@ class CommentsController extends Controller
 
 		$comments = [];
 		/** @var Comment $c */
-		foreach (CommentManager::getInstance()->fetch($db) as $c) {
-			$comments[] = $this->c->getCommentsService()->getCommentForTemplate($c);
+		foreach ($manager->fetch($db) as $c) {
+			$comments[] = $service->getCommentForTemplate($c);
 		}
 
 		return $this->render('index', $this->getTemplateParameters([
@@ -35,17 +38,19 @@ class CommentsController extends Controller
 
 	public function deleteAction(Request $request)
 	{
-		if (!($user = $this->c->getUserService()->getCurrentUser()) || !$user->isAdmin()) {
+		if (!($user = $this->getCurrentUser()) || !$user->isAdmin()) {
 			return $this->jsonError();
 		}
 		$data = $request->request->all();
 
-		if (!($comment = $this->c->getCommentsService()->getComment($data['cid']))) {
+		if (!($comment = $this->c->getCommentsBundle()->getCommentsService()->getComment($data['cid']))) {
 			return $this->jsonError();
 		}
 
-		CommentManager::getInstance()->delete($comment);
-		$this->c->getCommentsService()->updatePostCommentsCount($comment->getPost());
+		$this->c->getCommentsBundle()->getCommentManager()->delete($comment);
+		$this->c->getCommentsBundle()->getCommentsService()->updatePostCommentsCount(
+			$this->c->getContentBundle()->getPostService()->getPost($comment->getPostId())
+		);
 
 		return $this->jsonSuccess();
 	}

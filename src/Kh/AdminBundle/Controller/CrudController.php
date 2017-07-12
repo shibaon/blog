@@ -19,11 +19,9 @@ abstract class CrudController extends \Svi\Crud\Controller\CrudController
 
 	protected function getTemplateParameters(array $parameters = [])
 	{
-		$currentUser = $this->c->getUserService()->getCurrentEditor();
-
 		return parent::getTemplateParameters($parameters) + [
-			'alerts' => $this->c->getAlertsService()->getAlerts(),
-			'currentUser' => $this->c->getUserService()->getCurrentAdmin(),
+			'alerts' => $this->c->getSviBaseBundle()->getAlertsService()->getAlerts(),
+			'currentUser' => $this->c->getUserBundle()->getUserService()->getCurrentAdmin(),
 			'adminMenu' => Controller::getMenu(),
 		];
 	}

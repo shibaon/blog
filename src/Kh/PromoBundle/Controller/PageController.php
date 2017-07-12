@@ -10,18 +10,18 @@ class PageController extends Controller
 
 	public function pageAction($page)
 	{
-		if ($post = $this->c->getPostService()->getPostByAlias($page)) {
+		if ($post = $this->c->getContentBundle()->getPostService()->getPostByAlias($page)) {
 			return $this->redirect('_post', ['id' => $post->getId()]);
 		}
 		if (!$page) {
-			$page = $this->c->getPageService()->getPageByUrl(null);
+			$page = $this->c->getPromoBundle()->getPageService()->getPageByUrl(null);
 		} else {
-			$page = $this->c->getPageService()->getPageByUrl($page);
+			$page = $this->c->getPromoBundle()->getPageService()->getPageByUrl($page);
 		}
 		if (!$page) {
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
-		if (!$page->getPublished() && (!$this->c->getUserService()->getCurrentUser() || !$this->c->getUserService()->getCurrentUser()->isAdmin())) {
+		if (!$page->getPublished() && (!$this->getCurrentUser() || !$this->getCurrentUser()->isAdmin())) {
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
 
@@ -30,7 +30,7 @@ class PageController extends Controller
 			'title' => $page->getTitle(),
 			'text' => $page->getText(),
 			'published' => $page->getPublished(),
-			'isAdmin' => $this->c->getUserService()->getCurrentAdmin() ? true : false,
+			'isAdmin' => $this->getCurrentAdmin() ? true : false,
 		]));
 	}
 

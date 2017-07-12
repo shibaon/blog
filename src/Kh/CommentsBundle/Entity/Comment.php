@@ -48,14 +48,6 @@ class Comment extends Entity
 	}
 
 	/**
-	 * @return User
-	 */
-	public function getUser()
-	{
-		return UserManager::getInstance()->findOneById($this->getUserId());
-	}
-
-	/**
 	 * @param mixed $userId
 	 * @return Comment
 	 */
@@ -191,14 +183,6 @@ class Comment extends Entity
 	public function getPostId()
 	{
 		return $this->postId;
-	}
-
-	/**
-	 * @return Post
-	 */
-	public function getPost()
-	{
-		return PostManager::getInstance()->findOneById($this->getPostId());
 	}
 
 	/**

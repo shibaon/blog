@@ -2,6 +2,10 @@
 
 namespace Kh\UserBundle;
 
+use Kh\UserBundle\Manager\UserManager;
+use Kh\UserBundle\Service\AuthorizationService;
+use Kh\UserBundle\Service\UserService;
+
 class Bundle extends \Svi\Bundle
 {
 
@@ -34,6 +38,37 @@ class Bundle extends \Svi\Bundle
 			'service.user'          => 'Service\UserService',
 			'service.authorization' => 'Service\AuthorizationService',
 		];
+	}
+
+	protected function getManagers()
+	{
+		return [
+			'manager.user' => 'Manager\UserManager',
+		];
+	}
+
+	/**
+	 * @return UserService
+	 */
+	public function getUserService()
+	{
+		return $this->getApp()->get('service.user');
+	}
+
+	/**
+	 * @return AuthorizationService
+	 */
+	public function getAuthorizationService()
+	{
+		return $this->getApp()->get('service.authorization');
+	}
+
+	/**
+	 * @return UserManager
+	 */
+	public function getUserManager()
+	{
+		return $this->getApp()->get('manager.user');
 	}
 
 } 

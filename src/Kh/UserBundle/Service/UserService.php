@@ -20,7 +20,7 @@ class UserService extends \Svi\Base\Service\UserService
 
 	/**
 	 * @param $id
-	 * @return User
+	 * @return User|null
 	 */
 	public function getUserById($id)
 	{
@@ -128,9 +128,12 @@ class UserService extends \Svi\Base\Service\UserService
 		return $this->getManager()->findOneByFbId($id);
 	}
 
+	/**
+	 * @return UserManager
+	 */
 	protected function getManager()
 	{
-		return UserManager::getInstance();
+		return $this->c->getApp()->get('manager.user');
 	}
 
 }

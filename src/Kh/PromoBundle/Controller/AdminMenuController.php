@@ -55,7 +55,7 @@ class AdminMenuController extends CrudController
 	 */
 	protected function getManager()
 	{
-		return MenuManager::getInstance();
+		return $this->c->getPromoBundle()->getMenuManager();
 	}
 
 } 

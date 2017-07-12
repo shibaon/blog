@@ -70,7 +70,7 @@ class CommentsService extends ContainerAware
 
 	public function getCommentForTemplate(Comment $comment)
 	{
-		$user = $comment->getUser();
+		$user = $this->c->getUserBundle()->getUserService()->getUserById($comment->getId());
 
 		$author = $user ? $user->getName() : $comment->getAuthor();
 		$email = $user ? $user->getEmail() : $comment->getEmail();
@@ -88,6 +88,9 @@ class CommentsService extends ContainerAware
 			$avatar = $default;
 		}
 
+		/** @var Post $post */
+		$post = $this->c->getContentBundle()->getPostManager()->findOneById($comment->getPostId());
+
 		return [
 			'id' => $comment->getId(),
 			'author' => $author,
@@ -97,8 +100,8 @@ class CommentsService extends ContainerAware
 			'text' => $comment->getText(),
 			'avatar' => $avatar,
 			'post' => array(
-				'title' => $comment->getPost()->getTitle(),
-				'href' => $this->c->getRouting()->getUrl('_post', ['id' => $comment->getPost()->getId()]),
+				'title' => $post->getTitle(),
+				'href' => $this->c->getRouting()->getUrl('_post', ['id' => $post->getId()]),
 			),
 		];
 	}
@@ -114,7 +117,7 @@ class CommentsService extends ContainerAware
 
 	public function updatePostCommentsCount(Post $post)
 	{
-		PostManager::getInstance()->save($post->setCommentsCount($this->getCommentsCount($post)));
+		$this->c->getContentBundle()->getPostManager()->save($post->setCommentsCount($this->getCommentsCount($post)));
 	}
 
 	public function getCommentsCount(Post $post)
@@ -127,7 +130,7 @@ class CommentsService extends ContainerAware
 	 */
 	public function getManager()
 	{
-		return CommentManager::getInstance();
+		return $this->c->getCommentsBundle()->getCommentManager();
 	}
 
 }

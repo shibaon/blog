@@ -66,7 +66,7 @@ class AdminPageController extends CrudController
 
 	protected function getManager()
 	{
-		return PageManager::getInstance();
+		return $this->c->getPromoBundle()->getPageManager();
 	}
 
 } 

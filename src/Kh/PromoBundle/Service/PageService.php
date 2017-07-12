@@ -23,7 +23,7 @@ class PageService extends ContainerAware
 	 */
 	protected function getManager()
 	{
-		return PageManager::getInstance();
+		return $this->c->getPromoBundle()->getPageManager();
 	}
 
 } 

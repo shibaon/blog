@@ -13,12 +13,13 @@ class FrontController extends Controller
 	{
 		$search = $request->query->has('search') ? $request->query->get('search') : null;
 
-		$paginator = new Paginator($this->c->getPostService()->getPostsCount(null, $search), 10, $request);
+		$paginator = new Paginator($this->c->getContentBundle()->getPostService()->getPostsCount(null, $search), 10, $request);
 
 		return $this->render('index', $this->getTemplateParameters([
 			'posts' => array(
 				'pages' => $paginator->getView(),
-				'items' => $this->c->getPostService()->getPosts(null, $search, $paginator->getCurrentPage(), $paginator->getItemsPerPage()),
+				'items' => $this->c->getContentBundle()->getPostService()
+					->getPosts(null, $search, $paginator->getCurrentPage(), $paginator->getItemsPerPage()),
 			),
 			'count' => $paginator->getTotalItems(),
 			'search' => $search,

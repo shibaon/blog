@@ -67,14 +67,6 @@ class PostCategory extends Entity
 	}
 
 	/**
-	 * @return Category
-	 */
-	public function getCategory()
-	{
-		return CategoryManager::getInstance()->findOneById($this->getCategoryId());
-	}
-
-	/**
 	 * @param mixed $categoryId
 	 * @return PostCategory
 	 */
