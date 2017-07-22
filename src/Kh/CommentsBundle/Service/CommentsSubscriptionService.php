@@ -63,7 +63,7 @@ class CommentsSubscriptionService extends ContainerAware
 	 */
 	protected function getManager()
 	{
-		return SubscriptionManager::getInstance();
+		return $this->c->getCommentsBundle()->getCommentsSubscriptionManager();
 	}
 
 }

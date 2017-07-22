@@ -5,6 +5,7 @@ namespace Kh\MailBundle\Service;
 use Kh\CommentsBundle\Service\CommentsSubscriptionService;
 use Kh\CommentsBundle\Entity\Comment;
 use Kh\CommentsBundle\Entity\Subscription;
+use Kh\ContentBundle\Service\PostService;
 use Kh\UserBundle\Entity\User;
 use Kh\UserBundle\Service\UserService;
 
@@ -13,18 +14,21 @@ class MailService extends \Svi\Mail\Service\MailService
 
 	public function commentMail(Comment $comment)
 	{
+		$post = $this->getPostService()->getPost($comment->getPostId());
+		$user = $this->getUserService()->getUserById($comment->getId());
+
 		$this->adminMail('Новый комментарий', 'adminComment', [
 			'comment' => $comment,
-			'commentUrl' => $this->c->getRouting()->getUrl('_post', ['id' => $comment->getPost()->getId()], true) . '#comment-' . $comment->getId(),
+			'commentUrl' => $this->c->getRouting()->getUrl('_post', ['id' => $post->getId()], true) . '#comment-' . $comment->getId(),
 		]);
 		/** @var Subscription $s */
-		foreach ($this->getCommentsSubscriptionService()->getSubscribes($comment->getPost()) as $s) {
+		foreach ($this->getCommentsSubscriptionService()->getSubscribes($post) as $s) {
 			if (strtolower($s->getEmail()) != strtolower($comment->getEmail())) {
 				$this->mail($s->getEmail(), 'Новый комментарий', 'comment', [
-					'title' => $comment->getPost()->getTitle(),
-					'author' => $comment->getUser() ? $comment->getUser()->getName() : $comment->getAuthor(),
+					'title' => $post->getTitle(),
+					'author' => $user ?: $comment->getAuthor(),
 					'text' => $comment->getText(),
-					'commentUrl' => $this->c->getRouting()->getUrl('_post', ['id' => $comment->getPost()->getId()], true) . '#comment-' . $comment->getId(),
+					'commentUrl' => $this->c->getRouting()->getUrl('_post', ['id' => $post->getId()], true) . '#comment-' . $comment->getId(),
 					'blogAuthor' => $this->c->getSettingsService()->get('blogAuthor'),
 					'unsubscribeLink' => $this->c->getRouting()->getUrl('_comments_unsubscribe', array('hash' => $s->getHash()), true),
 				]);
@@ -69,12 +73,12 @@ class MailService extends \Svi\Mail\Service\MailService
 	public function mail($to, $subject, $template, $parameters, $isHtml = true)
 	{
 		$from = 'no-reply@' . $this->c->getConfig()->getParameter('siteurl');
-		$fromName = $this->c->getSettingsService()->get('sitename');
+		$fromName = $this->c->getSviBaseBundle()->getSettingsService()->get('sitename');
 
 		$parameters = array_merge($parameters, array(
 			'subject' => $subject,
 			'to' => $to,
-			'sitename' => $this->c->getSettingsService()->get('sitename'),
+			'sitename' => $this->c->getSviBaseBundle()->getSettingsService()->get('sitename'),
 			'siteurl' => $this->c->getConfig()->getParameter('siteurl'),
 		));
 
@@ -103,6 +107,14 @@ class MailService extends \Svi\Mail\Service\MailService
 	protected function getCommentsSubscriptionService()
 	{
 		return $this->c->getApp()->get('service.comments_subscription');
+	}
+
+	/**
+	 * @return PostService
+	 */
+	protected function getPostService()
+	{
+		return $this->c->getApp()->get('service.post');
 	}
 
 } 

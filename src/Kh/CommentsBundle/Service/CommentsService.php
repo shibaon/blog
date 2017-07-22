@@ -17,7 +17,7 @@ class CommentsService extends ContainerAware
 		$request = $this->getRequest();
 		if ($form->handleRequest($this->getRequest())->isValid()) {
 			$data = $form->getData();
-			if (!($user = $this->c->getUserService()->getCurrentUser()) && (!isset($data['address1']) || !isset($data['address2']) || $data['address1'] != $data['address2'])) {
+			if (!($user = $this->c->getUserBundle()->getUserService()->getCurrentUser()) && (!isset($data['address1']) || !isset($data['address2']) || $data['address1'] != $data['address2'])) {
 				$this->c->getAlertsService()->addAlert('error', 'Ошибка публикации комментария. Возможно, вы бот.');
 
 				return null;
@@ -46,10 +46,10 @@ class CommentsService extends ContainerAware
 			}
 
 			if (@$data['email'] && @$data['subscribe']) {
-				$this->c->getCommentsSubscriptionService()->subscribe($post, $data['email']);
+				$this->c->getCommentsBundle()->getCommentsSubscriptionService()->subscribe($post, $data['email']);
 			}
 
-			$this->c->getMailService()->commentMail($comment);
+			$this->c->getMailBundle()->getMailService()->commentMail($comment);
 
 			return $comment;
 		}

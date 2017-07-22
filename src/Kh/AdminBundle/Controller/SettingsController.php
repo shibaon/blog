@@ -13,14 +13,14 @@ class SettingsController extends CrudController
 
 	public function indexAction()
 	{
-		$this->c->getSettingsService()->updateDatabase();
+		$this->c->getSviBaseBundle()->getSettingsService()->updateDatabase();
 
 		return parent::indexAction();
 	}
 
 	protected function buildForm(Form $form, Entity $entity)
 	{
-		$type = $this->c->getSettingsService()->getSettingType($entity->getKey());
+		$type = $this->c->getSviBaseBundle()->getSettingsService()->getSettingType($entity->getKey());
 		if ($type == 'wysiwyg') {
 			$form->add('value', 'textarea', array(
 				'label' => $this->c->getSettingsService()->getSettingName($entity->getKey()),
@@ -32,7 +32,7 @@ class SettingsController extends CrudController
 			));
 		} else {
 			$form->add('value', $type, array(
-				'label' => $this->c->getSettingsService()->getSettingName($entity->getKey()),
+				'label' => $this->c->getSviBaseBundle()->getSettingsService()->getSettingName($entity->getKey()),
 				'data' => $entity->getValue(),
 				'required' => false,
 			));
@@ -42,10 +42,10 @@ class SettingsController extends CrudController
 
 	protected function modifyQuery(QueryBuilder $builder)
 	{
-		$keys = $this->c->getSettingsService()->getSettingsKeys();
+		$keys = $this->c->getSviBaseBundle()->getSettingsService()->getSettingsKeys();
 		$skeys = '';
 		$i = 0;
-		foreach ($this->c->getSettingsService()->getSettingsKeys() as $key) {
+		foreach ($this->c->getSviBaseBundle()->getSettingsService()->getSettingsKeys() as $key) {
 			$i++;
 			$skeys .= $builder->getConnection()->quote($key);
 			if (count($keys) != $i) {
@@ -61,18 +61,18 @@ class SettingsController extends CrudController
 
 	protected function getManager()
 	{
-		return SettingManager::getInstance();
+		return $this->c->getSviBaseBundle()->getSettingsManager();
 	}
 
 	protected function getListColumns()
 	{
-		$settingsManager = $this->c->getSettingsService();
+		$settingsService = $this->c->getSviBaseBundle()->getSettingsService();
 
 		return array(
 			'skey' => array(
 				'title' => 'Название настройки',
-				'value' => function(Setting $s) use ($settingsManager) {
-					return $settingsManager->getSettingName($s->getKey());
+				'value' => function(Setting $s) use ($settingsService) {
+					return $settingsService->getSettingName($s->getKey());
 				}
 			),
 			'value' => array(
