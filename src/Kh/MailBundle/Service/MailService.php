@@ -88,7 +88,7 @@ class MailService extends \Svi\Mail\Service\MailService
 		$message->setReplyTo($from, $fromName);
 		$message->setReturnPath($from);
 		$message->setTo($to);
-		$message->setBody($this->c->getApp()->getTwig()->render('Kh/MailBundle/Views/' . $template . '.twig', $parameters),
+		$message->setBody($this->c->getApp()->getTemplateProcessor()->render('Kh/MailBundle/Views/' . $template, $parameters),
 			$isHtml ? 'text/html' : 'text/plain');
 		$this->swiftMail($message);
 	}
