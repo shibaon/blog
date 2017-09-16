@@ -1,16 +1,17 @@
 <?php
-	return [
-		'Svi\Base\Bundle',
-		'Svi\Mail\Bundle',
-		'Svi\Crud\Bundle',
-		'Svi\File\Bundle',
+return [
+    \Svi\Base\Bundle::class,
+    \Svi\Mail\Bundle::class,
+    \Svi\Crud\Bundle::class,
+    \Svi\File\Bundle::class,
 
-		'Kh\AdminBundle\Bundle',
-		'Kh\BaseBundle\Bundle',
-		'Kh\UserBundle\Bundle',
-		'Kh\MailBundle\Bundle',
-		'Kh\ContentBundle\Bundle',
-		'Kh\CommentsBundle\Bundle',
+    \Kh\AdminBundle\Bundle::class,
+    \Kh\BaseBundle\Bundle::class,
+    \Kh\UserBundle\Bundle::class,
+    \Kh\MailBundle\Bundle::class,
+    \Kh\ContentBundle\Bundle::class,
+    \Kh\CommentsBundle\Bundle::class,
 
-		'Kh\PromoBundle\Bundle',
-	];
+
+    \Kh\PromoBundle\Bundle::class,
+];

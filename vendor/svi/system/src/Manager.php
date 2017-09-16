@@ -79,7 +79,7 @@ abstract class Manager
 
 			$dbColumnsToFieldNames = [];
 			$fieldToColumnNames = [];
-			$columns = array();
+			$columns = [];
 			foreach ($this->getDbFieldsDefinition() as $key => $value) {
 				$column = $table->addColumn($value[0], $value[1]);
 				if (count($value) > 2) {
@@ -231,7 +231,7 @@ abstract class Manager
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	final public function getFieldValueByDbKey($dbFieldName)
+	final public function getFieldValueByDbKey(Entity $entity, $dbFieldName)
 	{
 		$this->getTableSchema();
 		if (!array_key_exists('db_to_field', $this->cache) && !array_key_exists($dbFieldName, $this->cache['db_to_field'])) {
@@ -239,7 +239,7 @@ abstract class Manager
 		}
 		$method = 'get' . ucfirst($this->cache['db_to_field'][$dbFieldName]);
 
-		return $this->$method();
+		return $entity->$method();
 	}
 
 	/**
@@ -262,7 +262,7 @@ abstract class Manager
 		$columnSchema = $this->cache['columns'][$fieldName];
 		if ($columnSchema->getType() == 'Array') {
 			if (!is_array($value)) {
-				$value = $value ? unserialize($value) : [];
+				$value = $value ? json_decode($value, true) : [];
 			}
 		} elseif ($columnSchema->getType() == 'Boolean') {
 			$value = $value ? true : false;
@@ -319,9 +319,9 @@ abstract class Manager
 			$value = $this->getFieldValue($entity, $fieldName);
 			if ($schema->getType() == 'Array') {
 				if (!is_array($value) || !$value) {
-					$value = serialize([]);
+					$value = json_encode([]);
 				} else {
-					$value = serialize($value);
+					$value = json_encode($value);
 				}
 			}
 			if ($onlyChanged && array_key_exists($schema->getName(), $entity->getLoadedData())) {
@@ -350,6 +350,20 @@ abstract class Manager
 		return $result;
 	}
 
+    /**
+     * @param array $data
+     * @return Entity[]
+     */
+	final public function getListByData(array $data)
+    {
+        $result = [];
+
+        foreach ($data as $entityData) {
+            $result[] = $this->fillByData($entityData);
+        }
+
+        return $result;
+    }
 
 	/**
 	 * Fills class fields by SQL returned data
