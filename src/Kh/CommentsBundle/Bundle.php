@@ -26,16 +26,16 @@ class Bundle extends \Svi\Bundle
 	protected function getServices()
 	{
 		return [
-			'service.comments'              => 'Service\CommentsService',
-			'service.comments_subscription' => 'Service\CommentsSubscriptionService',
+			CommentsService::class,
+			CommentsSubscriptionService::class,
 		];
 	}
 
 	protected function getManagers()
 	{
 		return [
-			'manager.comment'      => 'Manager\CommentManager',
-			'manager.subscription' => 'Manager\SubscriptionManager',
+			CommentManager::class,
+			SubscriptionManager::class,
 		];
 	}
 
@@ -44,7 +44,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCommentsService()
 	{
-		return $this->getApp()->get('service.comments');
+		return $this->getApp()->get(CommentsService::class);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCommentsSubscriptionService()
 	{
-		return $this->getApp()->get('service.comments_subscription');
+		return $this->getApp()->get(CommentsSubscriptionService::class);
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCommentManager()
 	{
-		return $this->getApp()->get('manager.comment');
+		return $this->getApp()->get(CommentManager::class);
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCommentsSubscriptionManager()
 	{
-		return $this->getApp()->get('manager.subscription');
+		return $this->getApp()->get(SubscriptionManager::class);
 	}
 
 }

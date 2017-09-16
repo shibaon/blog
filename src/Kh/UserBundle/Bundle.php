@@ -35,15 +35,15 @@ class Bundle extends \Svi\Bundle
 	protected function getServices()
 	{
 		return [
-			'service.user'          => 'Service\UserService',
-			'service.authorization' => 'Service\AuthorizationService',
+			UserService::class,
+			AuthorizationService::class,
 		];
 	}
 
 	protected function getManagers()
 	{
 		return [
-			'manager.user' => 'Manager\UserManager',
+			UserManager::class,
 		];
 	}
 
@@ -52,7 +52,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getUserService()
 	{
-		return $this->getApp()->get('service.user');
+		return $this->getApp()->get(UserService::class);
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getAuthorizationService()
 	{
-		return $this->getApp()->get('service.authorization');
+		return $this->getApp()->get(AuthorizationService::class);
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getUserManager()
 	{
-		return $this->getApp()->get('manager.user');
+		return $this->getApp()->get(UserManager::class);
 	}
 
-} 
+}

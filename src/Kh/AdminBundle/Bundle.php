@@ -3,6 +3,7 @@
 namespace Kh\AdminBundle;
 
 use Kh\UserBundle\Entity\User;
+use Kh\UserBundle\Service\UserService;
 use Svi\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +17,7 @@ class Bundle extends \Svi\Bundle
 		$app->getSilex()->before(function(Request $request){
 			if (
 				preg_match('/^\\/admin.*/', $request->getRequestUri()) &&
-				!$this->getApp()->get('service.user')->getCurrentAdmin()
+				!$this->getApp()->get(UserService::class)->getCurrentAdmin()
 			) {
 				return $this->getApp()->getSilex()->redirect($this->getApp()->getRouting()->getUrl('_login'));
 			}

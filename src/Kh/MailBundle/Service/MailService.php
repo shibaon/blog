@@ -98,7 +98,7 @@ class MailService extends \Svi\Mail\Service\MailService
 	 */
 	protected function getUserService()
 	{
-		return $this->c->getApp()->get('service.user');
+		return $this->c->getApp()->get(UserService::class);
 	}
 
 	/**
@@ -106,7 +106,7 @@ class MailService extends \Svi\Mail\Service\MailService
 	 */
 	protected function getCommentsSubscriptionService()
 	{
-		return $this->c->getApp()->get('service.comments_subscription');
+		return $this->c->getApp()->get(CommentsSubscriptionService::class);
 	}
 
 	/**
@@ -114,7 +114,7 @@ class MailService extends \Svi\Mail\Service\MailService
 	 */
 	protected function getPostService()
 	{
-		return $this->c->getApp()->get('service.post');
+		return $this->c->getApp()->get(PostService::class);
 	}
 
 } 

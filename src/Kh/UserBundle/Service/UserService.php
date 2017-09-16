@@ -133,7 +133,7 @@ class UserService extends \Svi\Base\Service\UserService
 	 */
 	protected function getManager()
 	{
-		return $this->c->getApp()->get('manager.user');
+		return $this->c->getApp()->get(UserManager::class);
 	}
 
 }

@@ -49,16 +49,16 @@ class Bundle extends \Svi\Bundle
 	protected function getServices()
 	{
 		return [
-			'service.menu' => 'Service\MenuService',
-			'service.page' => 'Service\PageService',
+			MenuService::class,
+			PageService::class,
 		];
 	}
 
 	protected function getManagers()
 	{
 		return [
-			'manager.menu' => 'Manager\MenuManager',
-			'manager.page' => 'Manager\PageManager',
+			MenuManager::class,
+			PageManager::class,
 		];
 	}
 
@@ -67,7 +67,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getMenuService()
 	{
-		return $this->getApp()->get('service.menu');
+		return $this->getApp()->get(MenuService::class);
 	}
 
 	/**
@@ -75,7 +75,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getPageService()
 	{
-		return $this->getApp()->get('service.page');
+		return $this->getApp()->get(PageService::class);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getMenuManager()
 	{
-		return $this->getApp()->get('manager.menu');
+		return $this->getApp()->get(MenuManager::class);
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getPageManager()
 	{
-		return $this->getApp()->get('manager.page');
+		return $this->getApp()->get(PageManager::class);
 	}
 
 } 

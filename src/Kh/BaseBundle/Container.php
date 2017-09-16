@@ -10,7 +10,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getUserBundle()
 	{
-		return $this->getApp()->get('bundle.khuser');
+		return $this->getApp()->get(\Kh\UserBundle\Bundle::class);
 	}
 
 	/**
@@ -18,7 +18,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getPromoBundle()
 	{
-		return $this->getApp()->get('bundle.khpromo');
+		return $this->getApp()->get(\Kh\PromoBundle\Bundle::class);
 	}
 
 	/**
@@ -26,7 +26,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getMailBundle()
 	{
-		return $this->getApp()->get('bundle.khmail');
+		return $this->getApp()->get(\Kh\MailBundle\Bundle::class);
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getContentBundle()
 	{
-		return $this->getApp()->get('bundle.khcontent');
+		return $this->getApp()->get(\Kh\ContentBundle\Bundle::class);
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getCommentsBundle()
 	{
-		return $this->getApp()->get('bundle.khcomments');
+		return $this->getApp()->get(\Kh\CommentsBundle\Bundle::class);
 	}
 
 } 

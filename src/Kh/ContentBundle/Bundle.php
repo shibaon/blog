@@ -42,17 +42,17 @@ class Bundle extends \Svi\Bundle
 	protected function getServices()
 	{
 		return [
-			'service.post'     => 'Service\PostService',
-			'service.category' => 'Service\CategoryService',
+			PostService::class,
+			CategoryService::class,
 		];
 	}
 
 	protected function getManagers()
 	{
 		return [
-			'manager.category'      => 'Manager\CategoryManager',
-			'manager.post_category' => 'Manager\PostCategoryManager',
-			'manager.post'          => 'Manager\PostManager',
+			CategoryManager::class,
+			PostCategoryManager::class,
+			PostManager::class,
 		];
 	}
 
@@ -61,7 +61,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getPostService()
 	{
-		return $this->getApp()->get('service.post');
+		return $this->getApp()->get(PostService::class);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCategoryService()
 	{
-		return $this->getApp()->get('service.category');
+		return $this->getApp()->get(CategoryService::class);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getCategoryManager()
 	{
-		return $this->getApp()->get('manager.category');
+		return $this->getApp()->get(CategoryManager::class);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getPostCategoryManager()
 	{
-		return $this->getApp()->get('manager.post_category');
+		return $this->getApp()->get(PostCategoryManager::class);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Bundle extends \Svi\Bundle
 	 */
 	public function getPostManager()
 	{
-		return $this->getApp()->get('manager.post');
+		return $this->getApp()->get(PostManager::class);
 	}
 
 }

@@ -13,7 +13,7 @@ class UserController extends Controller
 
 	public function profileEditAction(Request $request)
 	{
-		if (!($user = $this->c->getUserService()->getCurrentUser())) {
+		if (!($user = $this->c->getUserBundle()->getUserService()->getCurrentUser())) {
 			throw new AccessDeniedHttpException();
 		}
 		$passwordChange = false;
@@ -55,7 +55,7 @@ class UserController extends Controller
 
 				if (!$data['password']) {
 					$form->get('password')->addError('Не указан текущий пароль');
-				} elseif (!$this->c->getUserService()->checkPassword($user, $data['password'])) {
+				} elseif (!$this->c->getUserBundle()->getUserService()->checkPassword($user, $data['password'])) {
 					$form->get('password')->addError('Неправильный пароль');
 				}
 				if (!$data['newPassword']) {
@@ -64,15 +64,13 @@ class UserController extends Controller
 					$form->get('repeat')->addError('Пароли не совпадают');
 				}
 				if ($form->isValid()) {
-					$user->setPassword($this->c->getUserService()->hashPassword($data['newPassword']));
+					$user->setPassword($this->c->getUserBundle()->getUserService()->hashPassword($data['newPassword']));
 				}
 			}
 			if ($form->isValid()) {
-				$user
-					->setName($data['name'])
-					->save();
-
-				$this->c->getAlertsService()->addAlert('success', 'Профиль успешно обновлён.');
+				$user->setName($data['name']);
+                $this->c->getUserBundle()->getUserManager()->save($user);
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'Профиль успешно обновлён.');
 
 				return $this->redirectToUrl($request->getRequestUri());
 			}
@@ -87,7 +85,7 @@ class UserController extends Controller
 
 	public function restoreFinalAction($hash, Request $request)
 	{
-		if (!($user = $this->c->getUserService()->getUserByRestoreHash($hash))) {
+		if (!($user = $this->c->getUserBundle()->getUserService()->getUserByRestoreHash($hash))) {
 			throw new NotFoundHttpException;
 		}
 
@@ -110,9 +108,9 @@ class UserController extends Controller
 				$form->get('repeat')->addError('Пароли не совпадают');
 			}
 			if ($form->isValid()) {
-				$user->setPassword($this->c->getUserService()->hashPassword($data['password']));
-				$user->save();
-				$this->c->getAlertsService()->addAlert('success', 'Пароль успешно изменён');
+				$user->setPassword($this->c->getUserBundle()->getUserService()->hashPassword($data['password']));
+				$this->c->getUserBundle()->getUserManager()->save($user);
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'Пароль успешно изменён');
 
 				return $this->redirect('_login');
 			}
@@ -137,14 +135,14 @@ class UserController extends Controller
 
 		if ($form->handleRequest($request)->isValid()) {
 			$data = $form->getData();
-			if (!($user = $this->c->getUserService()->getUserByEmail($data['email']))) {
+			if (!($user = $this->c->getUserBundle()->getUserService()->getUserByEmail($data['email']))) {
 				$form->get('email')->addError('Пользователь с таким email не найден');
 			}
 			if ($form->isValid()) {
 				$user->resetRestoreHash();
-				$user->save();
-				$this->c->getAlertsService()->addAlert('success', 'На указанный почтовый ящик отправлено письмо со ссылкой для восстановления пароля');
-				$this->c->getMailManager()->restoreMail($user);
+				$this->c->getUserBundle()->getUserManager()->save($user);
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'На указанный почтовый ящик отправлено письмо со ссылкой для восстановления пароля');
+				$this->c->getMailBundle()->getMailService()->restoreMail($user);
 
 				return $this->redirect('_login');
 			}
@@ -158,7 +156,7 @@ class UserController extends Controller
 
 	public function loginAction(Request $request)
 	{
-		if ($user = $this->c->getUserService()->getCurrentUser()) {
+		if ($user = $this->c->getUserBundle()->getUserService()->getCurrentUser()) {
 			return $this->redirect('_front');
 		}
 
@@ -178,15 +176,15 @@ class UserController extends Controller
 		if ($form->handleRequest($request)->isValid()) {
 			$data = $form->getData();
 			if (
-				!($user = $this->c->getUserService()->getUserByEmail($data['email'])) ||
-				!$this->c->getUserService()->checkPassword($user, $data['password'])
+				!($user = $this->c->getUserBundle()->getUserService()->getUserByEmail($data['email'])) ||
+				!$this->c->getUserBundle()->getUserService()->checkPassword($user, $data['password'])
 			) {
 				$form->addError('Пользователь с таким логином и паролем не найден');
 			}
 
 			if ($form->isValid()) {
-				$this->c->getUserService()->login($user);
-				$this->c->getAlertsService()->addAlert('success', 'Вы успешно авторизовались на сайте');
+				$this->c->getUserBundle()->getUserService()->login($user);
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'Вы успешно авторизовались на сайте');
 
 				if ($request->query->has('back')) {
 					return $this->redirectToUrl($request->query->get('back'));
@@ -204,7 +202,7 @@ class UserController extends Controller
 
 	public function registerAction(Request $request)
 	{
-		if ($user = $this->c->getUserService()->getCurrentUser()) {
+		if ($user = $this->c->getUserBundle()->getUserService()->getCurrentUser()) {
 			return $this->redirect('_front');
 		}
 
@@ -234,7 +232,7 @@ class UserController extends Controller
 			if ($data['password'] != $data['repeat']) {
 				$form->get('repeat')->addError('Пароль не совпадают');
 			}
-			if ($this->c->getUserService()->getUserByEmail($data['email'])) {
+			if ($this->c->getUserBundle()->getUserService()->getUserByEmail($data['email'])) {
 				$form->get('email')->addError('Пользователь с таким email уже зарегистрирован.');
 			}
 
@@ -247,10 +245,10 @@ class UserController extends Controller
 					->resetRegisterTimestamp()
 					->resetConfirmationHash();
 
-				$user->save();
-				$this->c->getUserService()->login($user);
-				$this->c->getAlertsService()->addAlert('success', 'Вы успешно зарегистрировались, вам на почту отправлена инструкция по активации.');
-				$this->c->getMailService()->registerMail($user);
+				$this->c->getUserBundle()->getUserManager()->save($user);
+				$this->c->getUserBundle()->getUserService()->login($user);
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'Вы успешно зарегистрировались, вам на почту отправлена инструкция по активации.');
+				$this->c->getMailBundle()->getMailService()->registerMail($user);
 
 				if ($request->query->has('back')) {
 					return $this->redirectToUrl($request->query->get('back'));
@@ -268,21 +266,21 @@ class UserController extends Controller
 
 	public function logoutAction()
 	{
-		$this->c->getUserService()->logout();
+		$this->c->getUserBundle()->getUserService()->logout();
 
 		return $this->redirect('_front');
 	}
 
 	public function confirmAction($hash)
 	{
-		if (!($user = $this->c->getUserService()->getUserByConfirmationHash($hash))) {
+		if (!($user = $this->c->getUserBundle()->getUserService()->getUserByConfirmationHash($hash))) {
 			throw new NotFoundHttpException;
 		}
 
 		$user->setConfirmationHash(null);
-		$user->save();
+		$this->c->getUserBundle()->getUserManager()->save($user);
 
-		$this->c->getAlertsService()->addAlert('success', 'Email успешно подтверждён');
+		$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', 'Email успешно подтверждён');
 
 		return $this->redirect('_front');
 	}

@@ -88,7 +88,7 @@ class AdminCategoryController extends CrudController
 	 */
 	protected function getManager()
 	{
-		return $this->c->getApp()->get('bundle.khcontent')->getCategoryManager();
+		return $this->c->getContentBundle()->getCategoryManager();
 	}
 
 }
