@@ -16,13 +16,13 @@ class NumberField extends Field
     {
         parent::validateData();
 
-        if (!$this->hasErrors()) {
+        if (!$this->hasErrors() && $this->getData() !== '' && $this->getData() !== NULL) {
             if ($this->getDecimals()) {
                 if (!is_numeric($this->getData())) {
                     $this->addError('forms.numberIsNotAFloat');
                 }
             } else {
-                if (!is_integer($this->getData())) {
+                if (!is_numeric($this->getData()) || !is_integer((int) $this->getData())) {
                     $this->addError('forms.numberIsNotAInteger');
                 }
             }

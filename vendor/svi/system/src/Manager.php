@@ -13,7 +13,7 @@ use Svi\Crud\Entity\SortableInterface;
 
 // Singleton
 
-abstract class Manager
+abstract class Manager implements ManagerInterface
 {
 	/** @var Application */
 	protected $app;
@@ -67,7 +67,7 @@ abstract class Manager
 	 * @return Table
 	 * @throws \Exception
 	 */
-	final public function getTableSchema()
+	public function getTableSchema()
 	{
 		if (!array_key_exists($this->getSchemaName(), self::$schemas)) {
 			self::$schemas[$this->getSchemaName()] = new Schema();
@@ -191,7 +191,7 @@ abstract class Manager
 	 * @return Column[]
 	 * @throws \Exception
 	 */
-	final public function getColumnsSchemas()
+	public function getColumnsSchemas()
 	{
 		if (!array_key_exists('columns', $this->cache)) {
 			$this->getTableSchema();
@@ -206,7 +206,7 @@ abstract class Manager
 	 * @param $fieldName
 	 * @return mixed
 	 */
-	final public function getFieldValue(Entity $entity, $fieldName)
+	public function getFieldValue(Entity $entity, $fieldName)
 	{
 		$method = 'get' . ucfirst($fieldName);
 
@@ -219,7 +219,7 @@ abstract class Manager
 	 * @param $value
 	 * @return mixed
 	 */
-	final public function setFieldValue(Entity $entity, $fieldName, $value)
+	public function setFieldValue(Entity $entity, $fieldName, $value)
 	{
 		$method = 'set' . ucfirst($fieldName);
 
@@ -231,7 +231,7 @@ abstract class Manager
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	final public function getFieldValueByDbKey(Entity $entity, $dbFieldName)
+	public function getFieldValueByDbKey(Entity $entity, $dbFieldName)
 	{
 		$this->getTableSchema();
 		if (!array_key_exists('db_to_field', $this->cache) && !array_key_exists($dbFieldName, $this->cache['db_to_field'])) {
@@ -249,7 +249,7 @@ abstract class Manager
 	 * @param $value
 	 * @throws \Exception
 	 */
-	final public function setFieldValueByDbKey(Entity $entity, $dbFieldName, $value)
+	public function setFieldValueByDbKey(Entity $entity, $dbFieldName, $value)
 	{
 		$this->getTableSchema();
 		if (!array_key_exists('db_to_field', $this->cache) && !array_key_exists($dbFieldName, $this->cache['db_to_field'])) {
@@ -276,7 +276,7 @@ abstract class Manager
 	 *
 	 * @return string
 	 */
-	final public function getIdFieldName()
+	public function getIdFieldName()
 	{
 		$this->getTableSchema();
 
@@ -288,14 +288,14 @@ abstract class Manager
 	 *
 	 * @return mixed
 	 */
-	final public function getIdColumnName()
+	public function getIdColumnName()
 	{
 		$this->getTableSchema();
 
 		return $this->cache['idColumnName'];
 	}
 
-	final public function getDbColumnNames()
+	public function getDbColumnNames()
 	{
 		$this->getTableSchema();
 
@@ -311,7 +311,7 @@ abstract class Manager
 	 * @param bool $updateLoadedData
 	 * @return array
 	 */
-	final public function getDataArray(Entity $entity, $onlyChanged = false, $updateLoadedData = false)
+	public function getDataArray(Entity $entity, $onlyChanged = false, $updateLoadedData = false)
 	{
 		$result = array();
 
@@ -354,7 +354,7 @@ abstract class Manager
      * @param array $data
      * @return Entity[]
      */
-	final public function getListByData(array $data)
+	public function getListByData(array $data)
     {
         $result = [];
 
@@ -372,7 +372,7 @@ abstract class Manager
 	 * @param Entity|null $entity
 	 * @return Entity
 	 */
-	final public function fillByData(array $data, Entity $entity = null)
+	public function fillByData(array $data, Entity $entity = null)
 	{
 		$entity = $entity ? $entity : $this->createEntity();
 		$entity->setLoadedData($data);
@@ -493,29 +493,22 @@ abstract class Manager
 		$connection = $this->getConnection();
 
 		$db = $connection->createQueryBuilder();
-		$columns = $this->getColumnsSchemas();
-		if (count($criteria)) {
-			foreach ($criteria as $col => $val) {
-				if (!isset($columns[$col])) {
-					throw new \Exception('There is no field "' . $col . '" in ' . $this->getEntityClassName());
-				}
-				/** @var Column $column */
-				$column = $columns[$col];
-				if ($val === null) {
-					$db->andWhere($column->getName() . " IS NULL");
-				} else {
-					$db->andWhere($column->getName() . " = :$col")->setParameter($col, $val);
-				}
-			}
-		}
+        if (count($criteria)) {
+            foreach ($criteria as $col => $val) {
+                if ($val === null) {
+                    $db->andWhere($col . " IS NULL");
+                } elseif (is_array($val)) {
+                    $db->andWhere($col . " IN (" . implode(', ', $val) . ')');
+                } elseif (is_numeric($col)) {
+                    $db->andWhere($val);
+                } else {
+                    $db->andWhere($col . " = :$col")->setParameter($col, $val);
+                }
+            }
+        }
 		if (is_array($orderBy) && count($orderBy)) {
 			foreach ($orderBy as $col => $val) {
-				if (!isset($columns[$col])) {
-					throw new \Exception('There is no field "' . $col . '" in ' . $this->getEntityClassName());
-				}
-				/** @var Column $column */
-				$column = $columns[$col];
-				$db->addOrderBy($column->getName(), $val);
+				$db->addOrderBy($col, $val);
 			}
 		}
 		if ($limit !== null) {
@@ -542,17 +535,28 @@ abstract class Manager
 	}
 
 	public function __call($name, $arguments) {
+	    $getTableColName = function ($field) {
+            $field = lcfirst($field);
+            $columns = $this->getDbColumnNames();
+            if (!array_key_exists($field, $columns)) {
+                throw new \Exception('There is no field ' . $field . ' in entity ' . $this->getEntityClassName());
+            }
+
+            return $columns[$field];
+        };
+
 		if (preg_match('/^findBy(.*)$/', $name, $matches)) {
 			if (count($arguments) < 1) {
 				throw new \Exception('Too few parameters');
 			}
-			return self::findBy([lcfirst($matches[1]) => $arguments[0]], @$arguments[1], @$arguments[2], @$arguments[3], @$arguments[4]);
+
+			return self::findBy([$getTableColName($matches[1]) => $arguments[0]], @$arguments[1], @$arguments[2], @$arguments[3], @$arguments[4]);
 		} elseif (preg_match('/^findOneBy(.*)$/', $name, $matches)) {
 			if (count($arguments) < 1) {
 				throw new \Exception('Too few parameters');
 			}
 
-			return $this->findOneBy([lcfirst($matches[1]) => $arguments[0]], @$arguments[1], @$arguments[2]);
+			return $this->findOneBy([$getTableColName($matches[1]) => $arguments[0]], @$arguments[1], @$arguments[2]);
 		}
 
 		throw new \ErrorException ('Call to Undefined Method ' . get_called_class() . '::' . $name . '()', 0, E_ERROR);
@@ -561,7 +565,7 @@ abstract class Manager
 	/**
 	 * @return \ReflectionClass
 	 */
-	public function getReflection()
+    protected function getReflection()
 	{
 		if ($this->reflection === null) {
 			$this->reflection = new \ReflectionClass($this->getEntityClassName());

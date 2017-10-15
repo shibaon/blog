@@ -17,7 +17,7 @@ class CommentsSubscriptionService extends ContainerAware
 	 */
 	public function getSubscriptionByArgs(Post $post, $email)
 	{
-		return $this->getManager()->findOneBy(['postId' => $post->getId(), 'email' => strtolower($email)]);
+		return $this->getManager()->findOneBy(['post_id' => $post->getId(), 'email' => strtolower($email)]);
 	}
 
 	public function subscribe(Post $post, $email)

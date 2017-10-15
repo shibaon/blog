@@ -22,7 +22,7 @@ class CategoryService extends ContainerAware
 				continue;
 			}
 			$executed[$category->getId()] = true;
-			$link = PostCategoryManager::getInstance()->findOneBy(['postId' => $post->getId(), 'categoryId' => $category->getId()]);
+			$link = PostCategoryManager::getInstance()->findOneBy(['post_id' => $post->getId(), 'category_id' => $category->getId()]);
 			if (!$link) {
 				$link = new PostCategory();
 				$link

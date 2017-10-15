@@ -61,7 +61,7 @@ class CommentsService extends ContainerAware
 	{
 		$result = array();
 		/** @var Comment $c */
-		foreach ($this->getManager()->findBy(['postId' => $post->getId()], ['timestamp' => 'asc']) as $c) {
+		foreach ($this->getManager()->findBy(['post_id' => $post->getId()], ['timestamp' => 'asc']) as $c) {
 			$result[] = $this->getCommentForTemplate($c);
 		}
 
