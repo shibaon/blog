@@ -5,7 +5,7 @@ namespace Kh\PromoBundle\Controller;
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\PromoBundle\Entity\Page;
 use Kh\PromoBundle\Manager\PageManager;
-use Svi\Base\Forms\Form;
+use Svi\BaseBundle\Forms\Form;
 use Svi\Entity;
 
 class AdminPageController extends CrudController

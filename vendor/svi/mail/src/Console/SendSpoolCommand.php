@@ -1,9 +1,9 @@
 <?php
 
-namespace Svi\Mail\Console;
+namespace Svi\MailBundle\Console;
 
-use Svi\ConsoleCommand;
-use Svi\Mail\Service\MailService;
+use Svi\MailBundle\Service\MailService;
+use Svi\Service\ConsoleService\ConsoleCommand;
 
 class SendSpoolCommand extends ConsoleCommand
 {

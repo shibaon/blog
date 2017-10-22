@@ -4,7 +4,7 @@ namespace Kh\MailBundle;
 
 use Kh\MailBundle\Service\MailService;
 
-class Bundle extends \Svi\Bundle
+class Bundle extends \Svi\Service\BundlesService\Bundle
 {
 
 	protected function getServices()

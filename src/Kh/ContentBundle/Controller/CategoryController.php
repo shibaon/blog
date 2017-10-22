@@ -3,9 +3,9 @@
 namespace Kh\ContentBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
-use Svi\Base\Utils\Paginator;
+use Svi\BaseBundle\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Svi\Exception\NotFoundHttpException;
 
 class CategoryController extends Controller
 {

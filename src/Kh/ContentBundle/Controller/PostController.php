@@ -4,7 +4,7 @@ namespace Kh\ContentBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Svi\Exception\NotFoundHttpException;
 
 class PostController extends Controller
 {

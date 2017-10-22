@@ -7,8 +7,9 @@ use Kh\CommentsBundle\Manager\SubscriptionManager;
 use Kh\CommentsBundle\Service\CommentsService;
 use Kh\CommentsBundle\Service\CommentsSubscriptionService;
 
-class Bundle extends \Svi\Bundle
+class Bundle extends \Svi\Service\BundlesService\Bundle
 {
+    use BundleTrait;
 
 	public function getRoutes()
 	{
@@ -37,38 +38,6 @@ class Bundle extends \Svi\Bundle
 			CommentManager::class,
 			SubscriptionManager::class,
 		];
-	}
-
-	/**
-	 * @return CommentsService
-	 */
-	public function getCommentsService()
-	{
-		return $this->getApp()->get(CommentsService::class);
-	}
-
-	/**
-	 * @return CommentsSubscriptionService
-	 */
-	public function getCommentsSubscriptionService()
-	{
-		return $this->getApp()->get(CommentsSubscriptionService::class);
-	}
-
-	/**
-	 * @return CommentManager
-	 */
-	public function getCommentManager()
-	{
-		return $this->getApp()->get(CommentManager::class);
-	}
-
-	/**
-	 * @return SubscriptionManager
-	 */
-	public function getCommentsSubscriptionManager()
-	{
-		return $this->getApp()->get(SubscriptionManager::class);
 	}
 
 }

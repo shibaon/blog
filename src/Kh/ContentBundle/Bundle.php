@@ -8,8 +8,9 @@ use Kh\ContentBundle\Manager\PostManager;
 use Kh\ContentBundle\Service\CategoryService;
 use Kh\ContentBundle\Service\PostService;
 
-class Bundle extends \Svi\Bundle
+class Bundle extends \Svi\Service\BundlesService\Bundle
 {
+    use BundleTrait;
 
 	public function getRoutes()
 	{
@@ -54,46 +55,6 @@ class Bundle extends \Svi\Bundle
 			PostCategoryManager::class,
 			PostManager::class,
 		];
-	}
-
-	/**
-	 * @return PostService
-	 */
-	public function getPostService()
-	{
-		return $this->getApp()->get(PostService::class);
-	}
-
-	/**
-	 * @return CategoryService
-	 */
-	public function getCategoryService()
-	{
-		return $this->getApp()->get(CategoryService::class);
-	}
-
-	/**
-	 * @return CategoryManager
-	 */
-	public function getCategoryManager()
-	{
-		return $this->getApp()->get(CategoryManager::class);
-	}
-
-	/**
-	 * @return PostCategoryManager
-	 */
-	public function getPostCategoryManager()
-	{
-		return $this->getApp()->get(PostCategoryManager::class);
-	}
-
-	/**
-	 * @return PostManager
-	 */
-	public function getPostManager()
-	{
-		return $this->getApp()->get(PostManager::class);
 	}
 
 }

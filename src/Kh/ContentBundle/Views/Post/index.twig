@@ -6,7 +6,7 @@
 
 	<div class="postPage">
 		<div class="pDate">{{ post.date }}
-			{% if currentAdmin %}<a href="{{ path('_admin_post_edit', {id:post.id}) }}?back={{ app.request.getRequestUri()|url_encode }}"><b class="icon-pencil icon-white"></b> Редактировать</a>{% endif %}
+			{% if currentAdmin %}<a href="{{ path('_admin_post_edit', {id:post.id}) }}?back={{ getRequestUri()|url_encode }}"><b class="icon-pencil icon-white"></b> Редактировать</a>{% endif %}
 		</div>
 		<div class="pContent">
 			{{ post.text|raw }}

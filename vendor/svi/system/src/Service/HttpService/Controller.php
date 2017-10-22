@@ -1,6 +1,9 @@
 <?php
 
-namespace Svi;
+namespace Svi\Service\HttpService;
+
+use Svi\Application;
+use Svi\Container;
 
 abstract class Controller
 {
@@ -24,7 +27,7 @@ abstract class Controller
 			$template = implode('/', $parts) . '/Views/' . $lastPart . '/' . $template;
 		}
 
-		return $this->c->getApp()->getTemplateProcessor()->render($template, $parameters);
+		return $this->c->getApp()->getTemplateService()->render($template, $parameters);
 	}
 
 	public function generateUrl($name, array $parameters = [], $absolute = false)
@@ -39,7 +42,7 @@ abstract class Controller
 
 	public function getParameter($key)
 	{
-		return $this->c->getApp()->getConfig()->getParameter($key);
+		return $this->c->getApp()->getConfigService()->getParameter($key);
 	}
 
 	public function redirect($route, array $parameters = [])

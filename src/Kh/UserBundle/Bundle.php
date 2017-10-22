@@ -6,8 +6,9 @@ use Kh\UserBundle\Manager\UserManager;
 use Kh\UserBundle\Service\AuthorizationService;
 use Kh\UserBundle\Service\UserService;
 
-class Bundle extends \Svi\Bundle
+class Bundle extends \Svi\Service\BundlesService\Bundle
 {
+    use BundleTrait;
 
 	public function getRoutes()
 	{
@@ -45,30 +46,6 @@ class Bundle extends \Svi\Bundle
 		return [
 			UserManager::class,
 		];
-	}
-
-	/**
-	 * @return UserService
-	 */
-	public function getUserService()
-	{
-		return $this->getApp()->get(UserService::class);
-	}
-
-	/**
-	 * @return AuthorizationService
-	 */
-	public function getAuthorizationService()
-	{
-		return $this->getApp()->get(AuthorizationService::class);
-	}
-
-	/**
-	 * @return UserManager
-	 */
-	public function getUserManager()
-	{
-		return $this->getApp()->get(UserManager::class);
 	}
 
 }

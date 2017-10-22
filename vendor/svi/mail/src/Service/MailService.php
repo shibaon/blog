@@ -1,10 +1,9 @@
 <?php
 
-namespace Svi\Mail\Service;
+namespace Svi\MailBundle\Service;
 
 use Svi\Application;
-use Svi\Base\Container;
-use Svi\Base\ContainerAware;
+use Svi\BaseBundle\ContainerAware;
 
 class MailService extends ContainerAware
 {

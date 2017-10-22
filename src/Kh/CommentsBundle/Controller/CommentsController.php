@@ -5,7 +5,7 @@ namespace Kh\CommentsBundle\Controller;
 use Kh\BaseBundle\Controller\Controller;
 use Kh\CommentsBundle\Entity\Comment;
 use Kh\CommentsBundle\Manager\CommentManager;
-use Svi\Base\Utils\Paginator;
+use Svi\BaseBundle\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommentsController extends Controller

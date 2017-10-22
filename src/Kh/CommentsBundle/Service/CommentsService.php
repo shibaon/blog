@@ -7,7 +7,7 @@ use Kh\CommentsBundle\Entity\Comment;
 use Kh\CommentsBundle\Manager\CommentManager;
 use Kh\ContentBundle\Entity\Post;
 use Kh\ContentBundle\Manager\PostManager;
-use Svi\Base\Forms\Form;
+use Svi\BaseBundle\Forms\Form;
 
 class CommentsService extends ContainerAware
 {

@@ -3,7 +3,7 @@
 namespace Kh\PromoBundle\Controller;
 
 use Kh\BaseBundle\Controller\Controller;
-use Svi\Base\Utils\Paginator;
+use Svi\BaseBundle\Utils\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends Controller

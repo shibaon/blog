@@ -1,19 +1,19 @@
 <?php
 
-namespace Svi\Crud\Controller;
+namespace Svi\CrudBundle\Controller;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Svi\Base\Controller\Controller;
-use Svi\Base\Forms\Field;
-use Svi\Base\Forms\Form;
-use Svi\Crud\Entity\NestedSortableInterface;
-use Svi\Crud\Entity\SortableInterface;
-use Svi\Crud\Entity\RemovableInterface;
-use Svi\Base\Utils\Paginator;
-use Svi\Base\Utils\Sorter;
+use Svi\BaseBundle\Controller\Controller;
+use Svi\BaseBundle\Forms\Field;
+use Svi\BaseBundle\Forms\Form;
+use Svi\CrudBundle\Entity\NestedSortableInterface;
+use Svi\CrudBundle\Entity\SortableInterface;
+use Svi\CrudBundle\Entity\RemovableInterface;
+use Svi\BaseBundle\Utils\Paginator;
+use Svi\BaseBundle\Utils\Sorter;
 use Svi\Entity;
 use Svi\Manager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Svi\Exception\NotFoundHttpException;
 
 abstract class CrudController extends Controller
 {
@@ -28,18 +28,18 @@ abstract class CrudController extends Controller
 		$templateTable = [
 			'columns' => [],
 			'rows' => [],
-			'delete' => @$routes['delete'],
-			'edit' => @$routes['edit'],
+			'delete' => isset($routes['delete']) ? $routes['delete'] : null,
+			'edit' => isset($routes['edit']) ? $routes['edit'] : null,
 		];
 
 		$sortableColumns = [];
 		foreach ($this->getListColumns() as $key => $c) {
-			if (is_string($c) || (@$c['type'] != 'actions' && @$c['sortable'] !== false)) {
+			if (is_string($c) || ((!isset($c['type']) || $c['type'] != 'actions') && (!isset($c['sortable']) || $c['sortable'] !== false))) {
 				$sortableColumns[] = $key;
 			}
-			$templateTable['columns'][$key] = array(
-				'title' => is_string($c) ? $c : @$c['title'],
-			);
+			$templateTable['columns'][$key] = [
+				'title' => is_string($c) ? $c : (isset($c['title']) ? $c['title'] : null),
+            ];
 		}
 
 		$sorter = new Sorter($sortableColumns, $this->getRequest());
@@ -84,7 +84,7 @@ abstract class CrudController extends Controller
 		return $this->render($this->getIndexTemplate(), $this->getTemplateParameters(array(
 			'data' => array(
 				'filter' => $filter,
-				'add' => @$routes['add'],
+				'add' => isset($routes['add']) ? $routes['add'] : null,
 				'pages' => $paginator ? $paginator->getView() : false,
 				'sorter' => $sorter,
 				'table' => $templateTable,
@@ -134,7 +134,7 @@ abstract class CrudController extends Controller
 		if ($formDelete->handleRequest($request)->isValid()) {
 			if ($formDelete->get('delete')->getData() == 'delete') {
 				$this->delete($entity);
-				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', $this->c->getApp()->getTranslation()->trans('crud.success.delete'));
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', $this->c->getApp()->getTranslationService()->trans('crud.success.delete'));
 
 				return $this->crudRedirect();
 			}
@@ -163,7 +163,7 @@ abstract class CrudController extends Controller
 		/** @var Field $value */
 		foreach ($form->getFields() as $key => $value) {
 			$attr = $value->getAttr();
-			if (@$attr['data-delete']) {
+			if (isset($attr['data-delete']) && $attr['data-delete']) {
 				$form->add('deletefile_' . $key, 'hidden');
 			}
 		}
@@ -178,8 +178,8 @@ abstract class CrudController extends Controller
 			if ($form->isValid()) {
 				$this->save($entity, $form, array());
 
-				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', $add ? $this->c->getApp()->getTranslation()->trans('crud.success.add') :
-					$this->c->getApp()->getTranslation()->trans('crud.success.edit'));
+				$this->c->getSviBaseBundle()->getAlertsService()->addAlert('success', $add ? $this->c->getApp()->getTranslationService()->trans('crud.success.add') :
+					$this->c->getApp()->getTranslationService()->trans('crud.success.edit'));
 
 				return $this->crudRedirect();
 			}
@@ -236,7 +236,7 @@ abstract class CrudController extends Controller
 			$item = array();
 			foreach ($this->getListColumns() as $key => $value) {
 				$col = $this->getColumnFieldValue($key, $value, $i);
-				$col['colTitle'] = is_string($value) ? $value : @$value['title'];
+				$col['colTitle'] = is_string($value) ? $value : (isset($value['title']) ? $value['title'] : null);
 				$item[$key] = $col;
 			}
 			if (!isset($item['id'])) {
@@ -271,9 +271,9 @@ abstract class CrudController extends Controller
 		return $this->render($this->getSortableTemplate(), $this->getTemplateParameters(array(
 			'items' => $items,
 			'routes' => array(
-				'add' => @$routes['add'],
-				'delete' => @$routes['delete'],
-				'edit' => @$routes['edit'],
+				'add' => isset($routes['add']) ? $routes['add'] : null,
+				'delete' => isset($routes['delete']) ? $routes['delete'] : null,
+				'edit' => isset($routes['edit']) ? $routes['edit'] : null,
 			),
 			'nested' => $this->getManager()->isSortable(),
 			'filter' => $filter,
@@ -370,7 +370,7 @@ abstract class CrudController extends Controller
 
 		if (array_key_exists('data-file', $attr)) {
 			if ($value) {
-				$uri = @$attr['data-uri'] ? $attr['data-uri'] : 'heap';
+				$uri = isset($attr['data-uri']) ? $attr['data-uri'] : 'heap';
 				$md5 = md5($value->getFilename());
 				$uri .= '/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2);
 			} else {
@@ -379,7 +379,7 @@ abstract class CrudController extends Controller
 
 			$this->getManager()->setFieldValue($entity, $key,
 				$this->c->getSviFileBundle()->getFileService()->getNewFileUriFromField($this->getManager()->getFieldValue($entity, $key), $value, $uri,
-					@$data['deletefile_' . $key] ? true : false)
+					!!isset($data['deletefile_' . $key]))
 			);
 		} else {
 			$this->getManager()->setFieldValue($entity, $key, $value);
@@ -436,8 +436,8 @@ abstract class CrudController extends Controller
 
 	protected function getColumnFieldValue($key, $column, Entity $item)
 	{
-		$value = is_string($column) ? NULL : @$column['value'];
-		if (!is_string($column) && @$column['type'] == 'actions') {
+		$value = is_string($column) ? NULL : (isset($column['value']) ? $column['value'] : null);
+		if (!is_string($column) && isset($column['type']) && $column['type'] == 'actions') {
 			$value = $column;
 		} else if ($value === NULL) {
 			$value = $this->getManager()->getFieldValue($item, $key);
@@ -453,7 +453,7 @@ abstract class CrudController extends Controller
 			} else {
 				$value = array('type' => 'string', 'value' => $value);
 			}
-		} else if (@$value['type'] == 'actions') {
+		} else if (isset($value['type']) && $value['type'] == 'actions') {
 			$value['entity'] = $item;
 		}
 

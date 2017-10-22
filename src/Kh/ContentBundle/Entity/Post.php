@@ -4,7 +4,7 @@ namespace Kh\ContentBundle\Entity;
 
 use Kh\UserBundle\Entity\User;
 use Kh\UserBundle\Manager\UserManager;
-use Svi\Crud\Entity\RemovableInterface;
+use Svi\CrudBundle\Entity\RemovableInterface;
 use Svi\Entity;
 
 class Post extends Entity implements RemovableInterface

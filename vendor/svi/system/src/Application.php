@@ -2,201 +2,151 @@
 
 namespace Svi;
 
-use \Symfony\Component\Debug\ErrorHandler;
-use \Symfony\Component\Debug\ExceptionHandler;
-use \Silex\Provider\DoctrineServiceProvider;
-use \Silex\Provider\ServiceControllerServiceProvider;
-use \Silex\Provider\TwigServiceProvider;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
+use Svi\Service\BundlesService;
+use Svi\Service\ConfigService;
+use Svi\Service\ConsoleService;
+use Svi\Service\CookiesService;
+use Svi\Service\ExceptionService;
+use Svi\Service\HttpService;
+use Svi\Service\LoggerService;
+use Svi\Service\RoutingService;
+use Svi\Service\SessionService;
+use Svi\Service\TemplateService;
+use Svi\Service\TranslationService;
+use Symfony\Component\HttpFoundation\Cookie;
 
-class Application implements \ArrayAccess
+class Application extends ArrayAccess
 {
 	private $instanceId;
-
-	/**
-	 * @var Logger
-	 */
-	private $logger;
-
-	private $console;
-	/**
-	 * @var \Silex\Application
-	 */
-	private $silex;
-
-	/**
-	 * @var Config
-	 */
-	private $config;
-
-	/**
-	 * @var Bundles
-	 */
-	private $bundles;
-
-	/**
-	 * @var Routing
-	 */
-	private $routing;
-
-	/**
-	 * @var TemplateProcessor
-	 */
-	private $templateProcessor;
 
 	public function __construct($config = null, array $argv = null)
 	{
 		$this->instanceId = md5(time() . microtime() . rand());
 
 		if ($argv) {
-			$this->console = true;
+			$this['console'] = true;
 		}
 
 		umask(0000);
 		$loader = require $this->getRootDir() . '/vendor/autoload.php';
-		$this->silex = new \Silex\Application();
 
 		$loader->add('', $this->getRootDir() . '/src');
 
-		$this->config = new Config($this, $config);
-		$this->silex['debug'] = $this->config->get('debug');
+		$this[ConfigService::class] = new ConfigService($this, $config);
+        $this['debug'] = $this->getConfigService()->get('debug');
+		$this[LoggerService::class] = new LoggerService($this);
 
-		$this->logger = new Logger($this);
+		$this[ExceptionService::class] = new ExceptionService($this);
 
-		ErrorHandler::register();
-		$handler = ExceptionHandler::register($this->config->get('debug'));
-		$handler->setHandler([$this->logger, 'handleException']);
-
-		if ($this->config->get('dbs')) {
-			$this->silex->register(new DoctrineServiceProvider(), [
-				'dbs.options' => $this->config->get('dbs'),
-			]);
+		if ($this->getConfigService()->get('dbs')) {
+		    $this['dbs'] = new ArrayAccess();
+		    foreach ($this->getConfigService()->get('dbs') as $name => $db) {
+		        $this['dbs'][$name] = DriverManager::getConnection($db, new Configuration());
+            }
 		}
 
-		$this->templateProcessor = new TemplateProcessor($this);
-		$this->tryInitTwig();
+		$this[TemplateService::class] = function () {
+		   return new TemplateService($this);
+        };
 
-		if (!$this->console) {
-			$this->silex['session'] = function(){
-				return new Session($this);
+		if (!$this->isConsole()) {
+			$this[SessionService::class] = function(){
+				return new SessionService($this);
 			};
 
-			$this->silex['cookies'] = function(){
-				return new Cookies($this);
+			$this[CookiesService::class] = function(){
+				return new CookiesService($this);
 			};
 		}
-		$this->silex['translation'] = function(){
-			return new Translation($this);
+		$this[TranslationService::class] = function(){
+			return new TranslationService($this);
 		};
 
-		$this->bundles = new Bundles($this);
+		if (!$this->isConsole()) {
+            $this[HttpService::class] = new HttpService($this);
+        }
 
-		if (!$this->console) {
-			$this->silex->register(new ServiceControllerServiceProvider());
-		}
-		$this->routing = new Routing($this);
+		$this[BundlesService::class] = new BundlesService($this);
+		$this[RoutingService::class] = new RoutingService($this);
 
-		if ($this->console) {
-			$this->console = new Console($this, $argv);
+		if ($this->isConsole()) {
+			$this[ConsoleService::class] = new ConsoleService($this, $argv);
 		}
 	}
 
 	public function run()
 	{
-		if (!$this->console) {
-			$this->getSilex()->run();
+		if (!$this->isConsole()) {
+			$this[HttpService::class]->run();
 		} else {
-			$this->console->run();
-		}
-	}
-
-	public function tryInitTwig()
-	{
-		if ($this->getConfig()->get('twig')) {
-			$this->silex->register(new TwigServiceProvider(), [
-				'twig.path' => [
-					$this->getRootDir() . '/src',
-					$this->getRootDir() . '/vendor',
-				],
-				'twig.options' => [
-					'cache' => $this->silex['debug'] ? false : $this->getRootDir() . '/app/cache',
-				] + $this->getConfig()->get('twig'),
-			]);
-			$this->getSilex()['twig']->addExtension(new SilexTwigExtension($this));
-			$this->getTemplateProcessor()->addProcessor('twig', $this->getSilex()['twig']);
+			$this[ConsoleService::class]->run();
 		}
 	}
 
 	/**
-	 * @return Config
+	 * @return ConfigService
 	 */
-	public function getConfig()
+	public function getConfigService()
 	{
-		return $this->config;
+		return $this[ConfigService::class];
 	}
 
 	/**
-	 * @return Routing
+	 * @return RoutingService
 	 */
-	public function getRouting()
+	public function getRoutingService()
 	{
-		return $this->routing;
+		return $this[RoutingService::class];
 	}
 
 	/**
-	 * @return Bundles
+	 * @return BundlesService
 	 */
-	public function getBundles()
+	public function getBundlesService()
 	{
-		return $this->bundles;
+		return $this[BundlesService::class];
 	}
 
-	/**
-	 * @return \Silex\Application
-	 */
-	public function getSilex()
-	{
-		return $this->silex;
-	}
-
-	public function get($service)
-	{
-		if (!$this->offsetExists($service)) {
-			throw new \Exception('Service "' . $service . '" is not registered');
-		}
-
-		return $this->offsetGet($service);
-	}
+    /**
+     * @return HttpService
+     */
+	public function getHttpService()
+    {
+        return $this[HttpService::class];
+    }
 
 	/**
 	 * @return \Symfony\Component\HttpFoundation\Request
 	 */
 	public function getRequest()
 	{
-		return $this->silex['request_stack']->getCurrentRequest();
+		return $this->getHttpService()->getRequest();
 	}
 
 	/**
-	 * @return Session
+	 * @return SessionService
 	 */
-	public function getSession()
+	public function getSessionService()
 	{
-		return $this->get('session');
+		return $this[SessionService::class];
 	}
 
 	/**
-	 * @return Cookies
+	 * @return CookiesService
 	 */
-	public function getCookies()
+	public function getCookiesService()
 	{
-		return $this->get('cookies');
+		return $this[CookiesService::class];
 	}
 
 	/**
-	 * @return Translation
+	 * @return TranslationService
 	 */
-	public function getTranslation()
+	public function getTranslationService()
 	{
-		return $this->get('translation');
+		return $this[TranslationService::class];
 	}
 
 	/**
@@ -208,19 +158,19 @@ class Application implements \ArrayAccess
 	{
 		if (!$this->offsetExists('dbs')) {
 			throw new \Exception('dbs is not configured');
-		} elseif (!isset($this->silex['dbs'][$schemaName])) {
+		} elseif (!isset($this['dbs'][$schemaName])) {
 			throw new \Exception('dbs schema "' . $schemaName . '" is not configured');
 		}
 
-		return $this->silex['dbs'][$schemaName];
+		return $this['dbs'][$schemaName];
 	}
 
 	/**
-	 * @return \Svi\Logger
+	 * @return LoggerService
 	 */
 	public function getLogger()
 	{
-		return $this->logger;
+		return $this[LoggerService::class];
 	}
 
 	/**
@@ -232,41 +182,47 @@ class Application implements \ArrayAccess
 	}
 
 	/**
-	 * @return TemplateProcessor
+	 * @return TemplateService
 	 */
-	public function getTemplateProcessor()
+	public function getTemplateService()
 	{
-		return $this->templateProcessor;
+		return $this[TemplateService::class];
 	}
 
 	public function isConsole()
 	{
-		return $this->console;
-	}
-
-	public function offsetExists($offset)
-	{
-		return isset($this->silex[$offset]);
-	}
-
-	public function offsetGet($offset)
-	{
-		return $this->silex[$offset];
-	}
-
-	public function offsetSet($offset, $value)
-	{
-		$this->silex[$offset] = $value;
-	}
-
-	public function offsetUnset($offset)
-	{
-		unset($this->silex[$offset]);
+		return $this->offsetExists(ConsoleService::class) && $this[ConsoleService::class];
 	}
 
 	public function getInstanceId()
 	{
 		return $this->instanceId;
 	}
+
+	public function before($callback)
+    {
+        if (!$this->isConsole()) {
+            $this->getHttpService()->before($callback);
+        }
+    }
+
+    public function after($callback)
+    {
+        if (!$this->isConsole()) {
+            $this->getHttpService()->after($callback);
+        }
+    }
+
+    public function finish($callback)
+    {
+        if (!$this->isConsole()) {
+            $this->getHttpService()->finish($callback);
+        }
+    }
+
+    public function error($callback)
+    {
+        $this[ExceptionService::class]->error($callback);
+    }
 
 }

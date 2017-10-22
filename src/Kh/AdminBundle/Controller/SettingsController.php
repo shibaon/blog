@@ -3,9 +3,9 @@
 namespace Kh\AdminBundle\Controller;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Svi\Base\Entity\Setting;
-use Svi\Base\Forms\Form;
-use Svi\Base\Manager\SettingManager;
+use Svi\BaseBundle\Entity\Setting;
+use Svi\BaseBundle\Forms\Form;
+use Svi\BaseBundle\Manager\SettingManager;
 use Svi\Entity;
 
 class SettingsController extends CrudController

@@ -5,8 +5,8 @@ namespace Kh\UserBundle\Controller;
 use Kh\BaseBundle\Controller\Controller;
 use Kh\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Svi\Exception\AccessDeniedHttpException;
+use Svi\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {

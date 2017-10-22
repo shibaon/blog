@@ -6,7 +6,7 @@ use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
 use Kh\ContentBundle\Entity\Post;
 use Kh\ContentBundle\Manager\PostManager;
-use Svi\Base\Forms\Form;
+use Svi\BaseBundle\Forms\Form;
 use Svi\Entity;
 
 class AdminPostController extends CrudController

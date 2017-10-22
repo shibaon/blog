@@ -2,7 +2,7 @@
 
 namespace Kh\PromoBundle\Entity;
 
-use Svi\Crud\Entity\NestedSortableInterface;
+use Svi\CrudBundle\Entity\NestedSortableInterface;
 use Svi\Entity;
 
 class Menu extends Entity implements NestedSortableInterface

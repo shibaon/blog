@@ -5,10 +5,10 @@ namespace Kh\ContentBundle\Controller;
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\ContentBundle\Entity\Category;
 use Kh\ContentBundle\Manager\CategoryManager;
-use Svi\Base\Forms\Form;
+use Svi\BaseBundle\Forms\Form;
 use Svi\Entity;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Svi\Exception\NotFoundHttpException;
 
 class AdminCategoryController extends CrudController
 {

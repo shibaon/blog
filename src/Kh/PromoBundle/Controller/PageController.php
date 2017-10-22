@@ -19,10 +19,10 @@ class PageController extends Controller
 			$page = $this->c->getPromoBundle()->getPageService()->getPageByUrl($page);
 		}
 		if (!$page) {
-			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+			throw new \Svi\Exception\NotFoundHttpException();
 		}
 		if (!$page->getPublished() && (!$this->getCurrentUser() || !$this->getCurrentUser()->isAdmin())) {
-			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+			throw new \Svi\Exception\NotFoundHttpException();
 		}
 
 		return $this->render('page', $this->getTemplateParameters([

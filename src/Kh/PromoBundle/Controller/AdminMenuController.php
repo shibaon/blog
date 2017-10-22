@@ -5,7 +5,7 @@ namespace Kh\PromoBundle\Controller;
 use Kh\AdminBundle\Controller\CrudController;
 use Kh\PromoBundle\Entity\Menu;
 use Kh\PromoBundle\Manager\MenuManager;
-use Svi\Base\Forms\Form;
+use Svi\BaseBundle\Forms\Form;
 use Svi\Entity;
 
 class AdminMenuController extends CrudController

@@ -1,9 +1,9 @@
 <?php
 return [
-    \Svi\Base\Bundle::class,
-    \Svi\Mail\Bundle::class,
-    \Svi\Crud\Bundle::class,
-    \Svi\File\Bundle::class,
+    \Svi\BaseBundle\Bundle::class,
+    \Svi\MailBundle\Bundle::class,
+    \Svi\CrudBundle\Bundle::class,
+    \Svi\FileBundle\Bundle::class,
 
     \Kh\AdminBundle\Bundle::class,
     \Kh\BaseBundle\Bundle::class,

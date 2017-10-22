@@ -2,7 +2,7 @@
 
 namespace Kh\BaseBundle;
 
-class Container extends \Svi\Base\Container
+class Container extends \Svi\BaseBundle\Container
 {
 
 	/**
@@ -10,7 +10,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getUserBundle()
 	{
-		return $this->getApp()->get(\Kh\UserBundle\Bundle::class);
+		return $this->getApp()[\Kh\UserBundle\Bundle::class];
 	}
 
 	/**
@@ -18,7 +18,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getPromoBundle()
 	{
-		return $this->getApp()->get(\Kh\PromoBundle\Bundle::class);
+		return $this->getApp()[\Kh\PromoBundle\Bundle::class];
 	}
 
 	/**
@@ -26,7 +26,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getMailBundle()
 	{
-		return $this->getApp()->get(\Kh\MailBundle\Bundle::class);
+		return $this->getApp()[\Kh\MailBundle\Bundle::class];
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getContentBundle()
 	{
-		return $this->getApp()->get(\Kh\ContentBundle\Bundle::class);
+		return $this->getApp()[\Kh\ContentBundle\Bundle::class];
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Container extends \Svi\Base\Container
 	 */
 	public function getCommentsBundle()
 	{
-		return $this->getApp()->get(\Kh\CommentsBundle\Bundle::class);
+		return $this->getApp()[\Kh\CommentsBundle\Bundle::class];
 	}
 
-} 
+}

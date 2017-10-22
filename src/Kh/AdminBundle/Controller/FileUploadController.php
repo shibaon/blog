@@ -2,7 +2,7 @@
 
 namespace Kh\AdminBundle\Controller;
 
-use Svi\File\Controller\TinyMceUploadController;
+use Svi\FileBundle\Controller\TinyMceUploadController;
 
 class FileUploadController extends TinyMceUploadController
 {

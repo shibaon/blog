@@ -5,7 +5,7 @@ namespace Kh\AdminBundle\Controller;
 use Kh\BaseBundle\Container;
 use Svi\Application;
 
-abstract class CrudController extends \Svi\Crud\Controller\CrudController
+abstract class CrudController extends \Svi\CrudBundle\Controller\CrudController
 {
 	/**
 	 * @var Container

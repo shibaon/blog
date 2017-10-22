@@ -9,7 +9,7 @@ use Kh\ContentBundle\Service\PostService;
 use Kh\UserBundle\Entity\User;
 use Kh\UserBundle\Service\UserService;
 
-class MailService extends \Svi\Mail\Service\MailService
+class MailService extends \Svi\MailBundle\Service\MailService
 {
 
 	public function commentMail(Comment $comment)

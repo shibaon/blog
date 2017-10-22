@@ -1,11 +1,11 @@
 <?php
 
-namespace Svi\Base\Service;
+namespace Svi\BaseBundle\Service;
 
-use Svi\Base\BundleTrait;
-use Svi\Base\ContainerAware;
-use Svi\Base\Entity\Setting;
-use Svi\Base\Manager\SettingManager;
+use Svi\BaseBundle\BundleTrait;
+use Svi\BaseBundle\ContainerAware;
+use Svi\BaseBundle\Entity\Setting;
+use Svi\BaseBundle\Manager\SettingManager;
 
 class SettingsService extends ContainerAware
 {

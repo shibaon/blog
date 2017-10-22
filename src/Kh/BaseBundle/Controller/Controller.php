@@ -5,7 +5,7 @@ namespace Kh\BaseBundle\Controller;
 use Kh\BaseBundle\Container;
 use Svi\Application;
 
-class Controller extends \Svi\Base\Controller\Controller
+class Controller extends \Svi\BaseBundle\Controller\Controller
 {
 	/**
 	 * @var Container

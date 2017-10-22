@@ -7,8 +7,9 @@ use Kh\PromoBundle\Manager\PageManager;
 use Kh\PromoBundle\Service\MenuService;
 use Kh\PromoBundle\Service\PageService;
 
-class Bundle extends \Svi\Bundle
+class Bundle extends \Svi\Service\BundlesService\Bundle
 {
+    use BundleTrait;
 
 	public function getRoutes()
 	{
@@ -35,13 +36,7 @@ class Bundle extends \Svi\Bundle
 
 			// Should be last for catching routes which was not defined
 			'Page'      => [
-				'_page' => [
-					'route'        => '/{page}',
-					'requirements' => [
-						'page' => '.*',
-					],
-					'method'       => 'page',
-				],
+				'_page' => '/{page}:page',
 			],
 		];
 	}
@@ -60,38 +55,6 @@ class Bundle extends \Svi\Bundle
 			MenuManager::class,
 			PageManager::class,
 		];
-	}
-
-	/**
-	 * @return MenuService
-	 */
-	public function getMenuService()
-	{
-		return $this->getApp()->get(MenuService::class);
-	}
-
-	/**
-	 * @return PageService
-	 */
-	public function getPageService()
-	{
-		return $this->getApp()->get(PageService::class);
-	}
-
-	/**
-	 * @return MenuManager
-	 */
-	public function getMenuManager()
-	{
-		return $this->getApp()->get(MenuManager::class);
-	}
-
-	/**
-	 * @return PageManager
-	 */
-	public function getPageManager()
-	{
-		return $this->getApp()->get(PageManager::class);
 	}
 
 } 

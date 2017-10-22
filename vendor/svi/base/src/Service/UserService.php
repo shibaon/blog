@@ -1,9 +1,9 @@
 <?php
 
-namespace Svi\Base\Service;
+namespace Svi\BaseBundle\Service;
 
-use Svi\Base\BundleTrait;
-use Svi\Base\ContainerAware;
+use Svi\BaseBundle\BundleTrait;
+use Svi\BaseBundle\ContainerAware;
 
 abstract class UserService extends ContainerAware
 {
