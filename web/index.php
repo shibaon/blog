@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 1);
 $start = microtime(true);
 
 $loader = require_once __DIR__ . '/../vendor/autoload.php';
