@@ -9,8 +9,6 @@ use Svi\BaseBundle\Manager\SettingManager;
 
 class SettingsService extends ContainerAware
 {
-    use BundleTrait;
-
 	private $allSettings;
 
 	public function getSettingsKeys()
@@ -101,7 +99,7 @@ class SettingsService extends ContainerAware
 	 */
 	protected function getManager()
 	{
-		return $this->getSettingsManager();
+		return $this->c->getApp()[SettingManager::class];
 	}
 
 }
