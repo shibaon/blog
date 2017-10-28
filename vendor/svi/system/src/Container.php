@@ -56,7 +56,7 @@ class Container
 	/**
 	 * @return ConfigService
 	 */
-	public function getConfig()
+	public function getConfigService()
 	{
 		return $this->app->getConfigService();
 	}
@@ -64,7 +64,7 @@ class Container
 	/**
 	 * @return RoutingService
 	 */
-	public function getRouting()
+	public function getRoutingService()
 	{
 		return $this->app->getRoutingService();
 	}
@@ -72,7 +72,7 @@ class Container
 	/**
 	 * @return SessionService
 	 */
-	public function getSession()
+	public function getSessionService()
 	{
 		return $this->app->getSessionService();
 	}
@@ -80,7 +80,7 @@ class Container
 	/**
 	 * @return CookiesService
 	 */
-	public function getCookies()
+	public function getCookiesService()
 	{
 		return $this->app->getCookiesService();
 	}

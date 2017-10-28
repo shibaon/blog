@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExceptionService
 {
     private $app;
-    private $handlers;
+    private $handlers = [];
 
     public function __construct(Application $app)
     {
@@ -75,7 +75,7 @@ class ExceptionService
         foreach ($this->handlers as $handler) {
             $reflection = new \ReflectionFunction($handler);
             $class = $reflection->getParameters()[0]->getClass();
-            if ($e instanceof $class) {
+            if ($class->isInstance($e)) {
                 if ($result = $handler($e, $this->app->isConsole() ? null : $this->app->getRequest())) {
                     if (!($result instanceof Response)) {
                         $result = Response::create($result);
@@ -116,9 +116,13 @@ class ExceptionService
         Response::create($content, $code)->send();
     }
 
-    public function error($callback)
+    public function error($callback, $prepend = false)
     {
-        $this->handlers[] = $callback;
+        if ($prepend) {
+            array_unshift($this->handlers, $callback);
+        } else {
+            $this->handlers[] = $callback;
+        }
     }
 
 }

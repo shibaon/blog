@@ -3,6 +3,7 @@
 namespace Svi\Service;
 
 use Svi\Application;
+use Svi\Exception\AccessDeniedHttpException;
 use Svi\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,33 @@ class HttpService
     public function __construct(Application $app)
     {
         $this->app = $app;
+
+        if (!$app->isConsole() && !$app['debug']) {
+            $app->error(function (NotFoundHttpException $e, Request $request) {
+                ob_start();
+                include __DIR__ . '/./HttpService/404.php';
+                $content = ob_get_contents();
+                ob_end_clean();
+
+                return new Response($content, 404);
+            });
+            $app->error(function (AccessDeniedHttpException $e, Request $request) {
+                ob_start();
+                include __DIR__ . '/./HttpService/403.php';
+                $content = ob_get_contents();
+                ob_end_clean();
+
+                return new Response($content, 403);
+            });
+            $app->error(function (\Throwable $e) {
+                ob_start();
+                include __DIR__ . '/./HttpService/500.php';
+                $content = ob_get_contents();
+                ob_end_clean();
+
+                return new Response($content, 500);
+            });
+        }
     }
 
     public function run()
@@ -90,19 +118,31 @@ class HttpService
         return $this->route;
     }
 
-    public function before($callback)
+    public function before($callback, $prepend = false)
     {
-        $this->before[] = $callback;
+        if ($prepend) {
+            array_unshift($this->before, $callback);
+        } else {
+            $this->before[] = $callback;
+        }
     }
 
-    public function after($callback)
+    public function after($callback, $prepend = false)
     {
-        $this->after[] = $callback;
+        if ($prepend) {
+            array_unshift($this->after, $callback);
+        } else {
+            $this->after[] = $callback;
+        }
     }
 
-    public function finish($callback)
+    public function finish($callback, $prepend = false)
     {
-        $this->finish[] = $callback;
+        if ($prepend) {
+            array_unshift($this->finish, $callback);
+        } else {
+            $this->finish[] = $callback;
+        }
     }
 
 }

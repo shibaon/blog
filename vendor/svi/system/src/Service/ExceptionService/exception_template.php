@@ -11,16 +11,17 @@ $path = function ($path) use ($root) {
 $printR = function ($array) {
     $result = [];
     foreach ($array as $key => $val) {
+        $key = is_numeric($key) ? '' : $key . ': ';
         if (is_object($val)) {
-            $result[] = $key . ': ' . get_class($val);
+            $result[] = $key . get_class($val);
         } elseif (is_array($val)) {
-            $result[] = $key . ': Array(args)';
+            $result[] = $key . 'Array(args)';
         } elseif ($val === false) {
             $result[] = 'false';
         } elseif ($val === NULL) {
             $result[] = 'null';
         } else {
-            $result[] = $key . ': Array(args)';
+            $result[] = $key . $val;
         }
     }
 
@@ -47,7 +48,7 @@ $printR = function ($array) {
                             if (is_object($arg)) {
                                 $args[] = get_class($arg);
                             } elseif (is_array($arg)) {
-                                $args[] = $printR($arg);
+                                $args[] = 'Array(' . $printR($arg) . ')';
                             } elseif ($arg === false) {
                                 $args[] = 'false';
                             } elseif ($arg === NULL) {

@@ -4,6 +4,7 @@ namespace Svi\Service\HttpService;
 
 use Svi\Application;
 use Svi\Container;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 abstract class Controller
 {
@@ -32,7 +33,7 @@ abstract class Controller
 
 	public function generateUrl($name, array $parameters = [], $absolute = false)
 	{
-		return $this->c->getRouting()->getUrl($name, $parameters, $absolute);
+		return $this->c->getRoutingService()->getUrl($name, $parameters, $absolute);
 	}
 
 	protected function getTemplateParameters(array $parameters = [])
@@ -52,7 +53,7 @@ abstract class Controller
 
 	public function redirectToUrl($url)
 	{
-		return new \Symfony\Component\HttpFoundation\RedirectResponse($url);
+		return new RedirectResponse($url);
 	}
 
 	public function getRequest()

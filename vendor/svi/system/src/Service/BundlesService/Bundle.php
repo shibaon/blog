@@ -60,7 +60,7 @@ abstract class Bundle
 		$result = [];
 
 		foreach ($this->managers as $managerName) {
-			$result[] = $this->app->get($managerName);
+			$result[] = $this->app[$managerName];
 		}
 
 		return $result;
@@ -123,7 +123,7 @@ abstract class Bundle
 
 	protected function getConfig()
 	{
-		return array();
+		return [];
 	}
 
 	private function loadConfig()
@@ -153,4 +153,4 @@ abstract class Bundle
 		}
 	}
 
-} 
+}
