@@ -99,10 +99,10 @@ class CommentsService extends ContainerAware
 			'date' => date('d.m.Y в H:i', $comment->getTimestamp()),
 			'text' => $comment->getText(),
 			'avatar' => $avatar,
-			'post' => array(
+			'post' => [
 				'title' => $post->getTitle(),
-				'href' => $this->c->getRouting()->getUrl('_post', ['id' => $post->getId()]),
-			),
+				'href' => $this->c->getRoutingService()->getUrl('_post', ['id' => $post->getId()]),
+            ],
 		];
 	}
 
