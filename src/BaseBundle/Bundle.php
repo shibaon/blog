@@ -16,7 +16,7 @@ class Bundle extends \Svi\Service\BundlesService\Bundle
 	{
 	    parent::__construct($app);
 
-		date_default_timezone_set('Asia/Krasnoyarsk');
+		date_default_timezone_set('Europe/Moscow');
 
 		$app->error(function(NotFoundHttpException $e, $code) use ($app) {
 			$controller = new PageController($app);
