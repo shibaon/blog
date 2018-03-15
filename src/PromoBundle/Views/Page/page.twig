@@ -1,0 +1,9 @@
+{% extends 'BaseBundle/Views/base.twig' %}
+
+{% block content %}
+
+	{% if isAdmin %}<a href="{{ path('_admin_pages_edit', {id:id}) }}?back={{ getRequestUri()|url_encode }}">Редактировать</a>{% endif %}
+
+	{{ text|raw }}
+
+{% endblock %}

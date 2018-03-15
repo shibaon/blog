@@ -1,0 +1,11 @@
+{% extends 'BaseBundle/Views/base.twig' %}
+
+{% set title = "Страница не найдена" %}
+
+{% block content %}
+
+	<p style="text-align:center">Запрашиваемая Вами страница не найдена. Предлагаем перейти на <a href="/">главную страницу</a>.</p>
+
+	<p style="text-align:center"><img src="{{ asset('base/img/404.png') }}" /></p>
+
+{% endblock %}

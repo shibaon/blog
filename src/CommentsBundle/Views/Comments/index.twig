@@ -1,0 +1,10 @@
+{% extends 'BaseBundle/Views/base.twig' %}
+
+{% set title = 'Все комментарии' %}
+
+{% block content %}
+
+	{% include 'CommentsBundle/Views/comments.twig' with {withPosts: true} %}
+	{% include 'BaseBundle/Views/paginator.twig' %}
+
+{% endblock %}

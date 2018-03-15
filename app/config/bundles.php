@@ -1,17 +1,19 @@
 <?php
 return [
-    \Svi\BaseBundle\Bundle::class,
+    \Svi\TengineBundle\Bundle::class,
+    \Svi\HttpBundle\Bundle::class,
     \Svi\MailBundle\Bundle::class,
+    \Svi\OrmBundle\Bundle::class,
     \Svi\CrudBundle\Bundle::class,
     \Svi\FileBundle\Bundle::class,
 
-    \Kh\AdminBundle\Bundle::class,
-    \Kh\BaseBundle\Bundle::class,
-    \Kh\UserBundle\Bundle::class,
-    \Kh\MailBundle\Bundle::class,
-    \Kh\ContentBundle\Bundle::class,
-    \Kh\CommentsBundle\Bundle::class,
+    \AdminBundle\Bundle::class,
+    \BaseBundle\Bundle::class,
+    \UserBundle\Bundle::class,
+    \MailBundle\Bundle::class,
+    \ContentBundle\Bundle::class,
+    \CommentsBundle\Bundle::class,
 
 
-    \Kh\PromoBundle\Bundle::class,
+    \PromoBundle\Bundle::class,
 ];

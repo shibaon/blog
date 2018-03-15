@@ -1,0 +1,10 @@
+{% extends 'MailBundle/Views/user.twig' %}
+
+{% block content %}
+
+	<p>Вы зарегистрировались на сайте {{ sitename }}.<br/>
+		Для подтверждения
+		вашего email-адреса перейдите по <a href="{{ confirmationUrl }}">этой ссылке</a>.
+	</p>
+
+{% endblock %}
