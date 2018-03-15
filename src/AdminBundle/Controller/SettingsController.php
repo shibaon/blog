@@ -70,18 +70,18 @@ class SettingsController extends CrudController
 		$settingsService = $this->getSettingsService();
 
 		return array(
-			'skey' => array(
+			'key' => [
 				'title' => 'Название настройки',
 				'value' => function(Setting $s) use ($settingsService) {
 					return $settingsService->getSettingName($s->getKey());
 				}
-			),
-			'value' => array(
+            ],
+			'value' => [
 				'title' => 'Значение',
 				'value' => function(Setting $s) {
 					return substr($s->getValue(), 0, 256);
 				}
-			),
+            ],
 		);
 	}
 
