@@ -7,6 +7,7 @@ use BaseBundle\Service\SettingsService;
 use PromoBundle\Controller\PageController;
 use Svi\Application;
 use Svi\HttpBundle\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class Bundle extends \Svi\Service\BundlesService\Bundle
 {
@@ -20,7 +21,7 @@ class Bundle extends \Svi\Service\BundlesService\Bundle
 		$app->error(function(NotFoundHttpException $e, $code) use ($app) {
 			$controller = new PageController($app);
 
-			return $controller->notFoundAction();
+			return new Response($controller->notFoundAction(), 404);
 		});
 	}
 
